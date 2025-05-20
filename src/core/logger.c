@@ -1,5 +1,4 @@
 #include <core/logger.h>
-// #include <core/asserts.h>
 #include <platform/platform.h>
 
 // HACK: Temporary, before we've got a platform layer
@@ -12,12 +11,6 @@
 
 
 static PlatformStateT* loggerPlatformState = NULL;
-
-
-void hkReportAssertionFailure(const char* expression, const char* message, const char* file, u16 line) {
-    hkLogOutput(LOG_LEVEL_FATAL, "Assertion Failure: %s, message: '%s', in file: %s, line: %d\n", expression, message, file, line);
-}
-
 
 b8 hkInitLogging(PlatformStateT* platformState) {
     loggerPlatformState = platformState;

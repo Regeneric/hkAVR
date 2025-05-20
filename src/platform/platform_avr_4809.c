@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <string.h> // for now
-
-#include <avr/io.h>
 #include <avr/interrupt.h>
 
 #include <hkmalloc.h>
@@ -13,8 +10,6 @@
 #include <core/logger.h>
 #include <platform/platform.h>
 
-#include <avr/io.h>
-#include <util/delay.h>
 
 #if ALLOW_MALLOC
     #warning WARNING: Using malloc() on AVR is highly discouraged!
@@ -130,23 +125,53 @@ b8 plStartup(PlatformStateT *platformState, u32 baudRate) {
         HARDWARE_DEBUG(platformState->statusFlags);
     } else PL_SET_RDY(platformState->statusFlags, PL_LOGGING);
 
-    // Subsystems
     if(!hkInitTimer0()) {
         // millis() timer failed to init
         PL_SET_ERR(platformState->statusFlags, PL_LOGGING);
         HARDWARE_DEBUG(platformState->statusFlags);
     } else PL_SET_RDY(platformState->statusFlags, PL_LOGGING);
 
+    if(!hkInitEvent(platformState)) {
+        PL_SET_ERR(platformState->statusFlags, PL_EVENT);
+        HARDWARE_DEBUG(platformState->statusFlags);
+    } else PL_SET_RDY(platformState->statusFlags, PL_EVENT);
+
+    sei();
+
     HINFO("Logging subsystem initialized.");
     HINFO("Timer0 initialized.");
+    HINFO("Event subsystem initialized.");
+    HINFO("Hardware IRQs enabled.");
     HINFO("Platform initialization successfull.");
 
     PL_SET_FLAG(platformState->statusFlags, PL_ALL_INIT_OK);
     return TRUE;
 }
 
-void plStop(PlatformStateT *platformState) {return;}
+void plStop(PlatformStateT* platformState) {
+    HTRACE("platform_avr_4809.c -> plStop(PlatformStateT*):void");
 
+    platformState->statusFlags = (u32)0xFFFF;
+    InternalStateT* internalState = (InternalStateT*)platformState->internalState;
+    internalState->baudRate  = 0;
+
+    // hkStopEvent();
+    // hkStopTimer0();
+    // hkStopLogging();
+}
+
+b8 plMessageStream(PlatformStateT* platformState) {
+    InternalStateT* internalState = (InternalStateT*)platformState->internalState;
+    if(!PL_IS_RDY(platformState->statusFlags, PL_EVENT)) {
+
+    }
+
+
+}
+
+b8 plPollEvent() {
+
+}
 
 // ----------------------------------------------------------------------------
 // 
@@ -246,6 +271,7 @@ void plSleep(u16 ms) {
         _delay_ms(ms);
     #endif 
 }
+
 
 void plSetFlag(PlatformStateT* platformState, u8 flag) {
     PL_SET_FLAG(platformState->statusFlags, flag);

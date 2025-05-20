@@ -18,21 +18,23 @@
 #define GET_SUBSYS_STATE(flags, shift) (((flags) >> (shift)) & PL_STATE_MASK)
 #define SET_SUBSYS_STATE(flags, shift, state) ((flags) = ((flags) & ~(PL_STATE_MASK << (shift))) | ((state & PL_STATE_MASK) << (shift)))
 
-#define PL_IS_RDY(flags, shift) (GET_SUBSYS_STATE(flags, shift) == PL_STATE_RDY)
-#define PL_IS_ERR(flags, shift) (GET_SUBSYS_STATE(flags, shift) == PL_STATE_ERR)
-#define PL_SET_RDY(flags, shift) SET_SUBSYS_STATE(flags, shift, PL_STATE_RDY)
-#define PL_SET_ERR(flags, shift) SET_SUBSYS_STATE(flags, shift, PL_STATE_ERR)
-#define PL_CLEAR(flags, shift)   SET_SUBSYS_STATE(flags, shift, PL_STATE_NONE)
+#define PL_IS_RDY(flags, shift)     (GET_SUBSYS_STATE(flags, shift) == PL_STATE_RDY)
+#define PL_IS_ERR(flags, shift)     (GET_SUBSYS_STATE(flags, shift) == PL_STATE_ERR)
+#define PL_IS_FLAGGED(flags, shift) (GET_SUBSYS_STATE(flags, shift) == PL_QUIT_FLAGGED)
+#define PL_SET_RDY(flags, shift)     SET_SUBSYS_STATE(flags, shift, PL_STATE_RDY)
+#define PL_SET_ERR(flags, shift)     SET_SUBSYS_STATE(flags, shift, PL_STATE_ERR)
+#define PL_SET_FLAGGED(flags, shift) SET_SUBSYS_STATE(flags, shift, PL_QUIT_FLAGGED)
+#define PL_CLEAR(flags, shift)       SET_SUBSYS_STATE(flags, shift, PL_STATE_NONE)
 
 #define PL_SET_FLAG(flags, bit)    ((flags)  |=  (bit))
 #define PL_CLEAR_FLAG(flags, bit)  ((flags)  &= ~(bit))
 #define PL_IS_FLAG_SET(flags, bit) (((flags) &   (bit)) != 0)
 
 enum {
-    PL_STATE_NONE = 0,  // 00 - uninitialized
-    PL_STATE_RDY  = 1,  // 01 - ready
-    PL_STATE_ERR  = 2,  // 10 - error
-    PL_RESERVED   = 3   // 11 - reserverd for future use
+    PL_STATE_NONE   = 0,  // 00 - uninitialized
+    PL_STATE_RDY    = 1,  // 01 - ready
+    PL_STATE_ERR    = 2,  // 10 - error
+    PL_QUIT_FLAGGED = 3   // 11 - subsystem was shutdown gracefully
 };
 
 
@@ -44,6 +46,7 @@ typedef struct PlatformStateT {
 
 b8   plStartup(PlatformStateT* platformState, u32 baudRate);
 void plShutdown(PlatformStateT* platformState);
+b8   plMessageStream(PlatformStateT* platformState);
 
 void* plAllocMem(size_t size);
 void  plFreeMem(void* block);

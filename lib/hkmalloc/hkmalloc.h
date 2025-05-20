@@ -34,7 +34,7 @@ typedef struct MemBlockHeaderT {
     uint16_t size;                  // header size + block size; multiple of alignment
     struct MemBlockHeaderT* next;   // next block
     struct MemBlockHeaderT* prev;   // previous block;
-} PACKED MemBlockHeaderT;
+} MemBlockHeaderT;
 
 #define HEADER_SIZE ALIGN(sizeof(MemBlockHeaderT))
 // enum {HEADER_SIZE = ALIGN(sizeof(MemBlockHeaderT))};
