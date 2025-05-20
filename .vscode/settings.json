@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "interrupt.h": "c",
+        "platform.h": "c",
+        "delay.h": "c",
+        "pgmspace.h": "c",
+        "hkstring.h": "c",
+        "asserts.h": "c",
+        "defines.h": "c",
+        "hkmemory.h": "c",
+        "io.h": "c"
+    }
+}
