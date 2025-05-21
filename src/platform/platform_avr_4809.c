@@ -129,6 +129,13 @@ b8 plStartup(PlatformStateT *platformState, u32 baudRate) {
     } else PL_SET_RDY(platformState->statusFlags, PL_LOGGING);
     HINFO("Logging subsystem initialized.");
 
+    if(!hkInitMemory(platformState)) {
+        HFATAL("plStartup(): Memory subsystem failed to initialize.");
+        PL_SET_ERR(platformState->statusFlags, PL_MEMORY);
+        HARDWARE_DEBUG(platformState->statusFlags);
+    } else PL_SET_RDY(platformState->statusFlags, PL_MEMORY);
+    HINFO("Memory subsystem initialized.");
+
     if(!hkInitTimer0()) {
         // millis() timer failed to init
         HERROR("plStartup(): Timer0 failed to initialize.");
@@ -143,13 +150,6 @@ b8 plStartup(PlatformStateT *platformState, u32 baudRate) {
         HARDWARE_DEBUG(platformState->statusFlags);
     } else PL_SET_RDY(platformState->statusFlags, PL_EVENT);
     HINFO("Event subsystem initialized.");
-
-    if(!hkInitMemory(platformState)) {
-        HFATAL("plStartup(): Memory subsystem failed to initialize.");
-        PL_SET_ERR(platformState->statusFlags, PL_MEMORY);
-        HARDWARE_DEBUG(platformState->statusFlags);
-    } else PL_SET_RDY(platformState->statusFlags, PL_MEMORY);
-    HINFO("Memory subsystem initialized.");
 
     if(!hkInitInput(platformState)) {
         HERROR("plStartup(): Input subsystem failed to initialize.");
@@ -179,7 +179,7 @@ void plStop(PlatformStateT* platformState) {
 }
 
 b8 plMessageStream(PlatformStateT* platformState) {
-    HTRACE("platform_avr_4809.c -> plMessageStream(PlatformStateT*):b8");
+    // HTRACE("platform_avr_4809.c -> plMessageStream(PlatformStateT*):b8");    // I do not recommend uncommenting this line
 
     InternalStateT* internalState = (InternalStateT*)platformState->internalState;
     if(PL_IS_RDY(platformState->statusFlags, PL_EVENT)) {
@@ -193,13 +193,13 @@ b8 plMessageStream(PlatformStateT* platformState) {
 
 void* plAllocMem(u16 size) {
     HTRACE("platform_avr_4809.c -> plAllocMem(u16):void*");
-    HDEBUG("plAllocMem(): ALLOW_MALLOC: %s", ALLOW_MALLOC ? "TRUE" : "FALSE");
+    HTRACE("plAllocMem(): ALLOW_MALLOC: %s", ALLOW_MALLOC ? "TRUE" : "FALSE");
     
     #if ALLOW_MALLOC
         HWARN("plAllocMem(): Using malloc() on AVR is highly discouraged!");
         void* buffer = malloc((u16)size);
     #else
-        HDEBUG("plAllocMem(): Using hkMalloc() instead of malloc()");
+        HTRACE("plAllocMem(): Using hkMalloc() instead of malloc()");
         void* buffer = hkMalloc((u16)size);
     #endif
 
@@ -211,13 +211,13 @@ void* plAllocMem(u16 size) {
 
 void plFreeMem(void* block) {
     HTRACE("platform_avr_4809.c -> plFreeMem(void*):void");
-    HDEBUG("plFreeMem(): ALLOW_MALLOC: %s", ALLOW_MALLOC ? "TRUE" : "FALSE");
+    HTRACE("plFreeMem(): ALLOW_MALLOC: %s", ALLOW_MALLOC ? "TRUE" : "FALSE");
 
     #if ALLOW_MALLOC
         HWARN("plFreeMem(): Using free() on AVR is highly discouraged!");
         free(block);
     #else
-        HDEBUG("plFreeMem(): Using hkFree() instead of free()");
+        HTRACE("plFreeMem(): Using hkFree() instead of free()");
         hkFree(block);
     #endif
 }

@@ -13,19 +13,20 @@
 b8 hkOnEvent(const EventT* event, void* listener);
 b8 hkOnButton(const EventT* event, void* listener);
 
+PlatformStateT platformState;
+
 int main() {
-    PlatformStateT platformState;
     plStartup(&platformState, BAUD_RATE);
 
-    u8* test = (u8*)plAllocMem(1 + sizeof(u8));
-    plFreeMem(test);
+    // u8* test = (u8*)plAllocMem(1 + sizeof(u8));
+    // plFreeMem(test);
     
-    u8* test2 = hkDarrayCreate(u8);
-    hkDarrayPush(test2, 10);
-    hkDarrayPush(test2, 20);
-    for(u8 i = 0; i != hkDarrayLength(test2); ++i) HDEBUG("test[%u]: %u", i, test2[i]);
+    // u8* test2 = hkDarrayCreate(u8);
+    // hkDarrayPush(test2, 10);
+    // hkDarrayPush(test2, 20);
+    // for(u8 i = 0; i != hkDarrayLength(test2); ++i) HDEBUG("test[%u]: %u", i, test2[i]);
 
-    hkEventRegister(2137            , 0, hkOnEvent);
+    hkEventRegister(0x69            , 0, hkOnEvent);
     hkEventRegister(EC_PLATFORM_STOP, 0, hkOnEvent);
     hkEventRegister(EC_BTN_PRESSED  , 0, hkOnButton);
     hkEventRegister(EC_BTN_RELEASED , 0, hkOnButton);
@@ -59,13 +60,11 @@ int main() {
 
 b8 hkOnEvent(const EventT* event, void* listener) {
     HTRACE("main.c -> hkOnEvent(const EventT*, void*):b8");
-    
-    u8 dataLo = (u8)event->data[0];
-    u8 dataHi = (u8)event->data[1];
 
     switch(event->code) {
         case EC_PLATFORM_STOP: {
             HINFO("EC_PLATFORM_STOP event recieved; shutting down...");
+            PL_CLEAR_FLAG(platformState.statusFlags, PL_ALL_INIT_OK);
             return TRUE;
         }
     } return TRUE;
@@ -79,7 +78,7 @@ b8 hkOnButton(const EventT* event, void* listener) {
 
     switch(event->code) {
         case EC_BTN_PRESSED: {
-            HDEBUG("hkOnButton(): Button %u pressed", event->code);
+            HDEBUG("hkOnButton(): Button %u %s", buttonID, buttonState ? "pressed" : "released");
 
             if(buttonID == BTN_ID_1) {
                 EventT e;

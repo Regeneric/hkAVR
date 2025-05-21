@@ -29,7 +29,7 @@ void _hkDarrayDestroy(void* array) {
 }
 
 i8 _hkDarrayFieldGet(void* array, i8 field) {
-    HTRACE("darray.c -> _hkDarrayFieldGet(void*, i8):i8");
+    // HTRACE("darray.c -> _hkDarrayFieldGet(void*, i8):i8");
 
     u16* header = (u16*)array - DARRAY_FIELD_LENGTH;
     return header[field];

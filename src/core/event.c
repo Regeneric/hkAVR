@@ -2,160 +2,157 @@
 #include <core/logger.h>
 #include <platform/platform.h>
 
-static EventCallbackF _sListenersCallback[MAX_EVENT_CODES][MAX_LISTENERS_PER_CODE];
-static void*          _sListenersInstance[MAX_EVENT_CODES][MAX_LISTENERS_PER_CODE];
-static u8             _sListenerCount[MAX_EVENT_CODES];
+#include <containers/darray.h>
 
-static EventT         _sEventQueue[EVENT_QUEUE_SIZE];
-static volatile b8    _sQueueHead, _sQueueTail;
+// static EventCallbackF _sListenersCallback[MAX_EVENT_CODES][MAX_LISTENERS_PER_CODE];
+// static void*          _sListenersInstance[MAX_EVENT_CODES][MAX_LISTENERS_PER_CODE];
+// static u8             _sListenerCount[MAX_EVENT_CODES];
+
+static EventListenerT* _sListeners[MAX_EVENT_CODES];
+static EventT* _sEventQueue;
+
+// static EventT         _sEventQueue[EVENT_QUEUE_SIZE];
+// static volatile b8    _sQueueHead, _sQueueTail;
 
 static PlatformStateT* eventPlatformState;
 
 
 b8 hkInitEvent(PlatformStateT* platformState) {
     HTRACE("event.c -> hkEventInit(PlatformStateT*):b8");
-    
     eventPlatformState = platformState;
+
     if(PL_IS_RDY(eventPlatformState->statusFlags, PL_EVENT)) {
         HDEBUG("hkInitEvent(): Events already initialized");
-        return;
+        return FALSE;
     }
 
     // Clear listeners count
-    for(u8 i = 0; i < MAX_EVENT_CODES; ++i) _sListenerCount[i] = 0;
-    
-    // Reset queue pointers
-    _sQueueHead = 0;
-    _sQueueTail = 0;
+    for(u8 i = 0; i < MAX_EVENT_CODES; ++i) {
+        // _sListenerCount[i] = 0;
+        _sListeners[i] = hkDarrayCreate(EventListenerT);
+        if(!_sListeners[i]) {
+            HERROR("hkInitEvent(): Out of Memory for _sListeners!");
+            return FALSE;
+        }
+    }
+
+    _sEventQueue = hkDarrayCreate(EventT);
+    if(!_sEventQueue) {
+        HERROR("hkInitEvent(): Out of Memory for _sEventQueue!");
+        return FALSE;
+    }
 
     PL_SET_RDY(eventPlatformState->statusFlags, PL_EVENT);
     HDEBUG("hkInitEvent(): Events initialized");
     return TRUE;
 }
 
-b8 hkEventRegister(b8 code, void* listener, EventCallbackF callback) {
+b8 hkEventRegister(u16 code, void* listener, EventCallbackF callback) {
     HTRACE("event.c -> hkEventRegister(b8, void*, EventCallbackF):b8");
     PL_CLEAR_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
-    PL_CLEAR(eventPlatformState->statusFlags, PL_EVENT);
 
-    if(code < 0 || code >= MAX_EVENT_CODES) {
+    if(code >= EC_MAX_EVENT_CODE) {
         PL_SET_ERR(eventPlatformState->statusFlags, PL_EVENT);
-        HDEBUG("hkEventRegister(): Event code unknown: %u.", code);
+        HDEBUG("hkEventRegister(): Event code unknown: 0x%x.", code);
         return FALSE;
     }
 
-    u8 count = _sListenerCount[code];   // Listeners of a given kind
-    for(u8 i = 0; i < count; ++i) {
-        // Check for duplicates
-        if(_sListenersInstance[code] == listener && _sListenersCallback[code][i] == callback) {
-            PL_SET_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
-            PL_SET_ERR(eventPlatformState->statusFlags , PL_EVENT);
-            HDEBUG("hkEventRegister(): Found a duplicate listener");
+    // Lazy‐allocate the listener list for this code
+    if (!_sListeners[code]) {
+        _sListeners[code] = hkDarrayCreate(EventListenerT);
+        if (!_sListeners[code]) {
+            HERROR("hkEventRegister(): Out of Memory creating listener list for 0x%x", code);
+            PL_SET_ERR(eventPlatformState->statusFlags, PL_EVENT);
             return FALSE;
         }
     }
 
-    if(count >= MAX_EVENT_CODES) {
-        // No space for a new listener
-        PL_SET_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
-        PL_SET_ERR(eventPlatformState->statusFlags , PL_EVENT);
-        HDEBUG("hkEventRegister(): No more space for new listeners");
-        return FALSE;
+    u16 count = hkDarrayLength(_sListeners[code]);
+    for(u16 i = 0; i < count; ++i) {
+        EventListenerT* L = &_sListeners[code][i];
+        if(L->listener == listener && L->callback == callback) {
+            PL_SET_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
+            PL_SET_ERR(eventPlatformState->statusFlags , PL_EVENT);
+            HDEBUG("hkEventRegister(): Found a duplicate listener for event 0x%x");
+            return FALSE;
+        }
     }
 
     // Append new listener to the lsit
-    _sListenersInstance[code][count] = listener;
-    _sListenersCallback[code][count] = callback;
-    _sListenerCount[code] = count+1;
+    EventListenerT lt = {listener, callback};
+    hkDarrayPush(_sListeners[code], lt);
 
     PL_SET_RDY(eventPlatformState->statusFlags, PL_EVENT);
-    HDEBUG("hkEventRegister(): Event registered | %u", code);
+    HDEBUG("hkEventRegister(): Event registered | 0x%x", code);
     return TRUE;
 }
 
-b8 hkEventUnregister(b8 code, void* listener, EventCallbackF callback) {
+b8 hkEventUnregister(u16 code, void* listener, EventCallbackF callback) {
     HTRACE("event.c -> hkEventUnregister(b8, void*, EventCallbackF):b8");
     PL_CLEAR_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
-    PL_CLEAR(eventPlatformState->statusFlags, PL_EVENT);
 
-    if(code < 0 || code >= MAX_EVENT_CODES) {
+    if(code >= EC_MAX_EVENT_CODE) {
         PL_SET_ERR(eventPlatformState->statusFlags, PL_EVENT);
-        HDEBUG("hkEventUnregister(): Event code unknown: %u.", code);
+        HDEBUG("hkEventUnregister(): Event code unknown: 0x%x.", code);
         return FALSE;
     }
 
-    u8 count = _sListenerCount[code];   // Listeners of a given kind
-    for(u8 i = 0; i < count; ++i) {
-        if(_sListenersInstance[code] == listener && _sListenersCallback[code][i] == callback) {
-            for(u8 j = 0; j+1 < count; ++j) {
-                // Shift events back one cell - 'unregister'
-                _sListenersInstance[code][j] = _sListenersInstance[code][j+1];
-                _sListenersCallback[code][j] = _sListenersCallback[code][j+1];
-            } _sListenerCount[code] = count-1;
-
+    u16 count = hkDarrayLength(_sListeners[code]);
+    for(u16 i = 0; i < count; ++i) {
+        EventListenerT* L = &_sListeners[code][i];
+        if(L->listener == listener && L->callback == callback) {
+            _sListeners[code] = hkDarrayPopAt(_sListeners[code], i, L);
+            
             PL_SET_RDY(eventPlatformState->statusFlags, PL_EVENT);
-            HDEBUG("hkEventUnregister(): Event unregistered | %u", code);
+            HDEBUG("hkEventUnregister(): Event unregistered | 0x%x", code);
             return TRUE;
         }
     }
 
     PL_SET_ERR(eventPlatformState->statusFlags , PL_EVENT); 
-    HDEBUG("hkEventUnregister(): Event not found | %u", code);
+    HDEBUG("hkEventUnregister(): Event not found | 0x%x", code);
     return FALSE;
 }
 
 b8 hkEventFire(const EventT* event) { 
     HTRACE("event.c -> hkEventFire(const EventT*):b8");
     PL_CLEAR_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
-    PL_CLEAR(eventPlatformState->statusFlags, PL_EVENT);
 
-    u8 next = (_sQueueHead+1) & (EVENT_QUEUE_SIZE-1);
-    if(next == _sQueueTail) {
-        // Queue is full, drop oldest event
-        PL_SET_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
-        HDEBUG("hkEventFire(): Event queue is full; dropping the oldest event");
-        _sQueueTail = (_sQueueTail+1) & (EVENT_QUEUE_SIZE-1);
-    }
+    hkDarrayPush(_sEventQueue, *event);
 
     PL_SET_RDY(eventPlatformState->statusFlags, PL_EVENT);
-    _sEventQueue[_sQueueHead] = *event;
-    _sQueueHead = next;
     return TRUE;
 }
 
 b8 hkEventPoll(EventT* event) {
-    HTRACE("event.c -> hkEventPoll(EventT*):b8");
+    // HTRACE("event.c -> hkEventPoll(EventT*):b8");    // I do not recommend uncommenting this line
     PL_CLEAR_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
-    PL_CLEAR(eventPlatformState->statusFlags, PL_EVENT);
 
-    if(_sQueueHead == _sQueueTail) {
+    u16 count = hkDarrayLength(_sEventQueue);
+    if(count == 0) {
         PL_SET_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);
-        HDEBUG("hkEventPoll(): Event buffer is empty");
         return FALSE;
-    }
+    } 
 
-    *event = _sEventQueue[_sQueueTail];
-    _sQueueTail = (_sQueueTail+1) & (EVENT_QUEUE_SIZE-1);
-    
+    _sEventQueue = hkDarrayPopAt(_sEventQueue, 0, event);
+    if(hkDarrayLength(_sEventQueue) > 0) HDEBUG("hkEventPoll(): Polling event: 0x%x", event->code);
+
     PL_SET_RDY(eventPlatformState->statusFlags, PL_EVENT);
     return TRUE;
 }
 
 void hkEventProcess(void) {
-    HTRACE("event.c -> hkEventProcess(void):void");
+    // HTRACE("event.c -> hkEventProcess(void):void");  // I do not recommend uncommenting this line
     
     EventT event;
     while(hkEventPoll(&event)) {
-        u8 code  = event.code;
-        u8 count = _sListenerCount[code];
+        u16 code  = event.code;
+        u16 count = hkDarrayLength(_sListeners[code]);
 
-        for(u8 i = 0; i < count; ++i) {
-            void*          listener = _sListenersInstance[code][i];
-            EventCallbackF callback = _sListenersCallback[code][i];
-            
-            // If this listener handles it, stop propagating
-            if(callback(&event, listener)) {
-                HDEBUG("hkEventProcess(): Event is being handled");
+        for(u16 i = 0; i < count; ++i) {
+            EventListenerT* L = &_sListeners[code][i];
+            if(L->callback(&event, L->listener)) {
+                HDEBUG("hkEventProcess(): Event 0x%x is being handled", code);
                 break;
             }
         }

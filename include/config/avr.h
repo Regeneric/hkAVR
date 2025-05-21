@@ -7,7 +7,7 @@
     #define USE_PROGMEM         TRUE        // Use PROGMEM when it is possible
     #define LOG_MSG_MAX_LEN     80          // Maximum length of a single log message ()
     #define KEEP_TRACK_OF_TIME  FALSE       // Keep accurate track of time sinc uC has started
-    #define LOG_LEVEL           LOG_DEBUG   // TRACE | DEBUG | INFO | WARN | ERROR
+    #define LOG_LEVEL           LOG_TRACE   // TRACE | DEBUG | INFO | WARN | ERROR
     #define USE_ISR_INPUT       FALSE       // Use hardwawre interrupts to read buttons
 
     // USE AT OWN RISK 

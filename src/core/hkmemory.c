@@ -39,6 +39,7 @@ b8 hkInitMemory(PlatformStateT* platformState) {
     }
     
     PL_SET_RDY(platformState->statusFlags, PL_MEMORY);
+    HDEBUG("hkInitMemory(): Memory initialized");
     return TRUE;
 }
 
@@ -63,7 +64,7 @@ void* hkAllocateMem(u16 size, MemoryTagT tag) {
     }
 
     PL_CLEAR_FLAG(memoryPlatformState->statusFlags, PL_GENERAL_ERROR);
-    PL_CLEAR(memoryPlatformState->statusFlags, PL_MEMORY);
+    PL_SET_RDY(memoryPlatformState->statusFlags, PL_MEMORY);
 
     if(tag == MEMT_UNKNOWN) {
         PL_SET_FLAG(memoryPlatformState->statusFlags, PL_GENERAL_ERROR);
@@ -94,7 +95,7 @@ void hkFreeMem(void* block, u16 size, MemoryTagT tag) {
     }
 
     PL_CLEAR_FLAG(memoryPlatformState->statusFlags, PL_GENERAL_ERROR);
-    PL_CLEAR(memoryPlatformState->statusFlags, PL_MEMORY);
+    PL_SET_RDY(memoryPlatformState->statusFlags, PL_MEMORY);
 
     if(tag == MEMT_UNKNOWN) {
         PL_SET_FLAG(memoryPlatformState->statusFlags, PL_GENERAL_ERROR);
