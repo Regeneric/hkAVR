@@ -8,6 +8,9 @@
 #include <hkmalloc.h>
 
 #include <core/logger.h>
+#include <core/event.h>
+#include <core/hkmemory.h>
+#include <core/input.h>
 #include <platform/platform.h>
 
 
@@ -124,26 +127,41 @@ b8 plStartup(PlatformStateT *platformState, u32 baudRate) {
         PL_SET_ERR(platformState->statusFlags, PL_LOGGING);
         HARDWARE_DEBUG(platformState->statusFlags);
     } else PL_SET_RDY(platformState->statusFlags, PL_LOGGING);
+    HINFO("Logging subsystem initialized.");
 
     if(!hkInitTimer0()) {
         // millis() timer failed to init
-        PL_SET_ERR(platformState->statusFlags, PL_LOGGING);
+        HERROR("plStartup(): Timer0 failed to initialize.");
+        PL_SET_ERR(platformState->statusFlags, PL_TIMER);
         HARDWARE_DEBUG(platformState->statusFlags);
-    } else PL_SET_RDY(platformState->statusFlags, PL_LOGGING);
+    } else PL_SET_RDY(platformState->statusFlags, PL_TIMER);
+    HINFO("Timer0 initialized.");
 
     if(!hkInitEvent(platformState)) {
+        HFATAL("plStartup(): Event subsystem failed to initialize.");
         PL_SET_ERR(platformState->statusFlags, PL_EVENT);
         HARDWARE_DEBUG(platformState->statusFlags);
     } else PL_SET_RDY(platformState->statusFlags, PL_EVENT);
+    HINFO("Event subsystem initialized.");
+
+    if(!hkInitMemory(platformState)) {
+        HFATAL("plStartup(): Memory subsystem failed to initialize.");
+        PL_SET_ERR(platformState->statusFlags, PL_MEMORY);
+        HARDWARE_DEBUG(platformState->statusFlags);
+    } else PL_SET_RDY(platformState->statusFlags, PL_MEMORY);
+    HINFO("Memory subsystem initialized.");
+
+    if(!hkInitInput(platformState)) {
+        HERROR("plStartup(): Input subsystem failed to initialize.");
+        PL_SET_ERR(platformState->statusFlags, PL_INPUT);
+        HARDWARE_DEBUG(platformState->statusFlags);
+    } else PL_SET_RDY(platformState->statusFlags, PL_INPUT);
+    HINFO("Input subsystem initialized.");
 
     sei();
-
-    HINFO("Logging subsystem initialized.");
-    HINFO("Timer0 initialized.");
-    HINFO("Event subsystem initialized.");
     HINFO("Hardware IRQs enabled.");
+    
     HINFO("Platform initialization successfull.");
-
     PL_SET_FLAG(platformState->statusFlags, PL_ALL_INIT_OK);
     return TRUE;
 }
@@ -161,31 +179,28 @@ void plStop(PlatformStateT* platformState) {
 }
 
 b8 plMessageStream(PlatformStateT* platformState) {
+    HTRACE("platform_avr_4809.c -> plMessageStream(PlatformStateT*):b8");
+
     InternalStateT* internalState = (InternalStateT*)platformState->internalState;
-    if(!PL_IS_RDY(platformState->statusFlags, PL_EVENT)) {
-
-    }
-
-
+    if(PL_IS_RDY(platformState->statusFlags, PL_EVENT)) {
+        hkEventProcess();
+    } return TRUE;
 }
 
-b8 plPollEvent() {
-
-}
 
 // ----------------------------------------------------------------------------
 // 
 
-void* plAllocMem(size_t size) {
+void* plAllocMem(u16 size) {
     HTRACE("platform_avr_4809.c -> plAllocMem(u16):void*");
     HDEBUG("plAllocMem(): ALLOW_MALLOC: %s", ALLOW_MALLOC ? "TRUE" : "FALSE");
     
     #if ALLOW_MALLOC
         HWARN("plAllocMem(): Using malloc() on AVR is highly discouraged!");
-        void* buffer = malloc((size_t)size);
+        void* buffer = malloc((u16)size);
     #else
         HDEBUG("plAllocMem(): Using hkMalloc() instead of malloc()");
-        void* buffer = hkMalloc((size_t)size);
+        void* buffer = hkMalloc((u16)size);
     #endif
 
     if(buffer == NULL) {
@@ -208,7 +223,7 @@ void plFreeMem(void* block) {
 }
 
 
-void* plSetMem(void* block, i32 value, size_t size) {
+void* plSetMem(void* block, i32 value, u16 size) {
     if(block == NULL) return NULL;
     if(size == 0) return NULL;
 
@@ -219,13 +234,13 @@ void* plSetMem(void* block, i32 value, size_t size) {
     return block;
 }
 
-void* plZeroMem(void* block, size_t size) {
-    HTRACE("platform_avr_4809.c -> plZeroMem(void*, size_t)");
+void* plZeroMem(void* block, u16 size) {
+    HTRACE("platform_avr_4809.c -> plZeroMem(void*, u16)");
     plSetMem(block, 0, size);
 }
 
-void* plCopyMem(void* dest, void* source, size_t size) {
-    HTRACE("platform_avr_4809.c -> plCopyMem(void*, void*, size_t):void");
+void* plCopyMem(void* dest, void* source, u16 size) {
+    HTRACE("platform_avr_4809.c -> plCopyMem(void*, void*, u16):void");
 
     if(dest == NULL) {
         HDEBUG("plCopyMem(): Passed `dest` is NULL");

@@ -48,17 +48,17 @@ b8   plStartup(PlatformStateT* platformState, u32 baudRate);
 void plShutdown(PlatformStateT* platformState);
 b8   plMessageStream(PlatformStateT* platformState);
 
-void* plAllocMem(size_t size);
+void* plAllocMem(u16 size);
 void  plFreeMem(void* block);
 
-void* plSetMem(void* block, i32 value, size_t size);
-void* plCopyMem(void* dest, void* src, size_t size);
-void* plZeroMem(void* block, size_t size);
+void* plSetMem(void* block, i32 value, u16 size);
+void* plCopyMem(void* dest, void* src, u16 size);
+void* plZeroMem(void* block, u16 size);
 
 void plSleep(u16 ms);
 
 void plSetFlag(PlatformStateT* platformState, u8 flag);
-void plClearFlat(PlatformStateT* platformState, u8 flag);
+void plClearFlag(PlatformStateT* platformState, u8 flag);
 void plFlagReady(PlatformStateT* platformState, u8 flag);
 void plFlagError(PlatformStateT* platformState, u8 flag);
 

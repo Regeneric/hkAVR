@@ -14,8 +14,12 @@ static PlatformStateT* eventPlatformState;
 
 b8 hkInitEvent(PlatformStateT* platformState) {
     HTRACE("event.c -> hkEventInit(PlatformStateT*):b8");
-
+    
     eventPlatformState = platformState;
+    if(PL_IS_RDY(eventPlatformState->statusFlags, PL_EVENT)) {
+        HDEBUG("hkInitEvent(): Events already initialized");
+        return;
+    }
 
     // Clear listeners count
     for(u8 i = 0; i < MAX_EVENT_CODES; ++i) _sListenerCount[i] = 0;
@@ -135,4 +139,25 @@ b8 hkEventPoll(EventT* event) {
     
     PL_SET_RDY(eventPlatformState->statusFlags, PL_EVENT);
     return TRUE;
+}
+
+void hkEventProcess(void) {
+    HTRACE("event.c -> hkEventProcess(void):void");
+    
+    EventT event;
+    while(hkEventPoll(&event)) {
+        u8 code  = event.code;
+        u8 count = _sListenerCount[code];
+
+        for(u8 i = 0; i < count; ++i) {
+            void*          listener = _sListenersInstance[code][i];
+            EventCallbackF callback = _sListenersCallback[code][i];
+            
+            // If this listener handles it, stop propagating
+            if(callback(&event, listener)) {
+                HDEBUG("hkEventProcess(): Event is being handled");
+                break;
+            }
+        }
+    }
 }
