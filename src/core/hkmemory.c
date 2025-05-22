@@ -9,7 +9,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#if HPLATFORM_AVR && USE_PROGMEM
+#if HPLATFORM_AVR && HK_USE_PROGMEM
     #include <avr/pgmspace.h>
 #endif
 
@@ -45,13 +45,17 @@ b8 hkInitMemory(PlatformStateT* platformState) {
 
 void hkStopMemory() {
     HTRACE("hkmemory.c -> hkStopMemory(void):void");
+    HDEBUG("hkStopMemory(): Stopping memory subsystem.");
 
     if(!PL_IS_RDY(memoryPlatformState->statusFlags, PL_MEMORY)) {
         HDEBUG("hkAllocateMem(): Memory submodule is not initialized; nothing to stop.");
         return;
     }
 
+    plZeroMem(&memStats, sizeof(memStats));
+    
     PL_SET_FLAGGED(memoryPlatformState->statusFlags, PL_MEMORY);
+    HINFO("Memory subsystem has been stopped.");
     return;
 }
 

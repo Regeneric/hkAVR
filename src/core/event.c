@@ -47,6 +47,18 @@ b8 hkInitEvent(PlatformStateT* platformState) {
     return TRUE;
 }
 
+void hkStopEvent() {
+    HTRACE("event.c -> hkStopEvent():void");
+    HDEBUG("hkStopEvent(): Stopping event subsystem.");
+    
+    for(u8 i = 0; i < MAX_EVENT_CODES; ++i) hkDarrayDestroy(_sListeners[i]);
+    hkDarrayDestroy(_sEventQueue);
+
+    PL_SET_FLAGGED(eventPlatformState->statusFlags, PL_INPUT);
+    HINFO("Event subsytem has been stopped.");
+}
+
+
 b8 hkEventRegister(u16 code, void* listener, EventCallbackF callback) {
     HTRACE("event.c -> hkEventRegister(b8, void*, EventCallbackF):b8");
     PL_CLEAR_FLAG(eventPlatformState->statusFlags, PL_GENERAL_ERROR);

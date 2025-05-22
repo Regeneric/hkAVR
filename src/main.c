@@ -13,10 +13,19 @@
 b8 hkOnEvent(const EventT* event, void* listener);
 b8 hkOnButton(const EventT* event, void* listener);
 
-PlatformStateT platformState;
+static PlatformStateT platformState;
 
 int main() {
-    plStartup(&platformState, BAUD_RATE);
+    plStartup(&platformState, HK_BAUD_RATE);
+
+    static const InputLayoutT buttons[BTN_COUNT] = {
+        {&HK_INPUT_REG, BTN_ACCEPT, HK_ACCEPT_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm},
+        {&HK_INPUT_REG, BTN_CANCEL, HK_CANCEL_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm}
+    };
+
+    if(!hkInitInput(&platformState, &buttons)) {
+        HERROR("plStartup(): Input subsystem failed to initialize.");
+    } else HINFO("Input subsystem initialized.");
 
     // u8* test = (u8*)plAllocMem(1 + sizeof(u8));
     // plFreeMem(test);
@@ -52,9 +61,7 @@ int main() {
         
         plMessageStream(&platformState);
         // plSleep(1000);
-    }
-
-    return 0;
+    } return 0;
 }
 
 
@@ -64,7 +71,7 @@ b8 hkOnEvent(const EventT* event, void* listener) {
     switch(event->code) {
         case EC_PLATFORM_STOP: {
             HINFO("EC_PLATFORM_STOP event recieved; shutting down...");
-            PL_CLEAR_FLAG(platformState.statusFlags, PL_ALL_INIT_OK);
+            plStop(platformState);
             return TRUE;
         }
     } return TRUE;
@@ -80,7 +87,7 @@ b8 hkOnButton(const EventT* event, void* listener) {
         case EC_BTN_PRESSED: {
             HDEBUG("hkOnButton(): Button %u %s", buttonID, buttonState ? "pressed" : "released");
 
-            if(buttonID == BTN_ID_1) {
+            if(buttonID == BTN_ACCEPT) {
                 EventT e;
                 e.code    = EC_PLATFORM_STOP;
                 e.data[0] = 0;

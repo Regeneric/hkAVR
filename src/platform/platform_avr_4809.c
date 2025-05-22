@@ -14,7 +14,7 @@
 #include <platform/platform.h>
 
 
-#if ALLOW_MALLOC
+#if HK_ALLOW_MALLOC
     #warning WARNING: Using malloc() on AVR is highly discouraged!
 #endif
 
@@ -23,7 +23,7 @@
     #warning WARNING: F_CPU defined for 20 MHz clock
 #endif
 
-#if TIMER_SLEEP
+#if HK_TIMER_SLEEP
     #include <avr/sleep.h>
 #else
     #include <util/delay.h>
@@ -42,6 +42,12 @@ typedef struct InternalStateT {
 // ****************************************************************************
 // HELPER FUNCTIONS
 // ----------------------------------------------------------------------------
+void hkDeepSleep() {
+    VREF.CTRLA = 0;
+    SLPCTRL.CTRLA = SLEEP_MODE_PWR_DOWN | SLPCTRL_SEN_bm;
+    __asm__ __volatile__("sleep"); 
+}
+
 b8 hkInitTimer0(void) {
     HTRACE("platform_avr_4809.c -> hkInitTimer0(void):void");
 
@@ -56,12 +62,14 @@ b8 hkInitTimer0(void) {
 
 b8 hkStopTimer0(void) {
     HTRACE("platform_avr_4809.c -> hkStopTimer0(void):void"); 
+    HDEBUG("hkStopTimer0(): Stopping Timer0.");
 
     TCB0.CTRLA    = 0;
     TCB0.CCMP     = 0;
     TCB0.INTCTRL  = 0;
     TCB0.INTFLAGS = 0;
 
+    HINFO("Timer0 has been stopped.");
     return TRUE;
 }
 
@@ -90,7 +98,7 @@ void hkTransmitUSART(u8 data) {
 }
 
 int hkPrintUSART(char c, FILE* stream) {
-    #if USE_CRLF
+    #if HK_USE_CRLF
         if(c == '\n') hkTransmitUSART((u8)'\r');
         hkTransmitUSART((u8)c);
     #else
@@ -110,7 +118,7 @@ b8 plStartup(PlatformStateT *platformState, u32 baudRate) {
     _PROTECTED_WRITE(CLKCTRL.MCLKCTRLB, 0 << CLKCTRL_PEN_bp);     // Disable clock divider
     
     platformState->statusFlags = (u32)0x0000;
-    #if ALLOW_MALLOC
+    #if HK_ALLOW_MALLOC
         platformState->internalState = malloc(sizeof(InternalStateT));
         PL_SET_FLAG(platformState->statusFlags, PL_MALLOC_WARN);
     #else
@@ -151,12 +159,14 @@ b8 plStartup(PlatformStateT *platformState, u32 baudRate) {
     } else PL_SET_RDY(platformState->statusFlags, PL_EVENT);
     HINFO("Event subsystem initialized.");
 
-    if(!hkInitInput(platformState)) {
-        HERROR("plStartup(): Input subsystem failed to initialize.");
-        PL_SET_ERR(platformState->statusFlags, PL_INPUT);
-        HARDWARE_DEBUG(platformState->statusFlags);
-    } else PL_SET_RDY(platformState->statusFlags, PL_INPUT);
-    HINFO("Input subsystem initialized.");
+    // TODO: It should be up to user if he wants any input; 
+    // TODO: Take it out of plStartup()
+    // if(!hkInitInput(platformState)) {
+    //     HERROR("plStartup(): Input subsystem failed to initialize.");
+    //     PL_SET_ERR(platformState->statusFlags, PL_INPUT);
+    //     HARDWARE_DEBUG(platformState->statusFlags);
+    // } else PL_SET_RDY(platformState->statusFlags, PL_INPUT);
+    // HINFO("Input subsystem initialized.");
 
     sei();
     HINFO("Hardware IRQs enabled.");
@@ -173,16 +183,20 @@ void plStop(PlatformStateT* platformState) {
     InternalStateT* internalState = (InternalStateT*)platformState->internalState;
     internalState->baudRate  = 0;
 
-    // hkStopEvent();
-    // hkStopTimer0();
-    // hkStopLogging();
+    hkStopInput();
+    hkStopEvent();
+    hkStopTimer0(); PL_SET_FLAGGED(platformState->statusFlags, PL_TIMER);
+    hkStopMemory();
+    hkStopLogging();
+
+    hkDeepSleep();
 }
 
 b8 plMessageStream(PlatformStateT* platformState) {
     // HTRACE("platform_avr_4809.c -> plMessageStream(PlatformStateT*):b8");    // I do not recommend uncommenting this line
 
     InternalStateT* internalState = (InternalStateT*)platformState->internalState;
-    if(PL_IS_RDY(platformState->statusFlags, PL_EVENT)) {
+    if(PL_IS_RDY(platformState->statusFlags, PL_EVENT) && PL_IS_FLAG_SET(platformState->statusFlags, PL_ALL_INIT_OK)) {
         hkEventProcess();
     } return TRUE;
 }
@@ -193,9 +207,9 @@ b8 plMessageStream(PlatformStateT* platformState) {
 
 void* plAllocMem(u16 size) {
     HTRACE("platform_avr_4809.c -> plAllocMem(u16):void*");
-    HTRACE("plAllocMem(): ALLOW_MALLOC: %s", ALLOW_MALLOC ? "TRUE" : "FALSE");
+    HTRACE("plAllocMem(): HK_ALLOW_MALLOC: %s", HK_ALLOW_MALLOC ? "TRUE" : "FALSE");
     
-    #if ALLOW_MALLOC
+    #if HK_ALLOW_MALLOC
         HWARN("plAllocMem(): Using malloc() on AVR is highly discouraged!");
         void* buffer = malloc((u16)size);
     #else
@@ -211,9 +225,9 @@ void* plAllocMem(u16 size) {
 
 void plFreeMem(void* block) {
     HTRACE("platform_avr_4809.c -> plFreeMem(void*):void");
-    HTRACE("plFreeMem(): ALLOW_MALLOC: %s", ALLOW_MALLOC ? "TRUE" : "FALSE");
+    HTRACE("plFreeMem(): HK_ALLOW_MALLOC: %s", HK_ALLOW_MALLOC ? "TRUE" : "FALSE");
 
-    #if ALLOW_MALLOC
+    #if HK_ALLOW_MALLOC
         HWARN("plFreeMem(): Using free() on AVR is highly discouraged!");
         free(block);
     #else
@@ -266,9 +280,9 @@ void* plCopyMem(void* dest, void* source, u16 size) {
 
 void plSleep(u16 ms) {
     HTRACE("platform_avr_4809.c -> plSleep(u16):void");
-    HDEBUG("TIMER_SLEEP: %s", TIMER_SLEEP ? "TRUE" : "FALSE");
+    HDEBUG("HK_TIMER_SLEEP: %s", HK_TIMER_SLEEP ? "TRUE" : "FALSE");
 
-    #if TIMER_SLEEP
+    #if HK_TIMER_SLEEP
         if(ms == 0) {
             HWARN("plSleep(): Cannot sleep for %u ms.", ms);
             return;
@@ -346,8 +360,10 @@ void plStopLogging(PlatformStateT* platformState) {
     HTRACE("platform_avr_4809.c -> plStopLogging(PlatformStateT*):void");
     HDEBUG("plStopLogging(): Stopping logging...");
 
-    PL_CLEAR(platformState->statusFlags, PL_USART);
-    PL_CLEAR(platformState->statusFlags, PL_LOGGING);
+    PL_SET_FLAGGED(platformState->statusFlags, PL_USART);
+    PL_SET_FLAGGED(platformState->statusFlags, PL_LOGGING);
+
+    PORTB.DIRCLR = 0xFF;
 
     USART3.CTRLA = 0;
     USART3.CTRLB = 0;
@@ -366,4 +382,147 @@ void plConsoleWriteError(const char* message) {
     fprintf(stderr, "%s", message);
 }
 
+
+
+
+
+// ISR(PORTA_PORT_vect) {
+//     u8 flags       = PORTA.INTFLAGS;
+//     PORTA.INTFLAGS = flags;
+
+//     for(u8 i = 0; i != BTN_COUNT; ++i) {
+//         const InputLayoutT *btn = &_sgInputButtons[i];
+//         if(flags & btn->pinMask) {            
+//             b8 pressed = !(btn->port->IN & btn->pinMask);
+
+//             EventT event;
+//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+//             event.sender  = NULL;    // Or &whateverHere
+//             event.data[0] = btn->id;
+//             event.data[1] = pressed;
+
+//             hkEventFire(&event);
+//         }
+//     }
+// }
+
+// ISR(PORTB_PORT_vect) {
+//     u8 flags       = PORTB.INTFLAGS;
+//     PORTB.INTFLAGS = flags;
+
+//     for(u8 i = 0; i != BTN_COUNT; ++i) {
+//         const InputLayoutT *btn = &_sgInputButtons[i];
+//         if(flags & btn->pinMask) {            
+//             b8 pressed = !(btn->port->IN & btn->pinMask);
+
+//             EventT event;
+//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+//             event.sender  = NULL;    // Or &whateverHere
+//             event.data[0] = btn->id;
+//             event.data[1] = pressed;
+
+//             hkEventFire(&event);
+//         }
+//     }
+// }
+
+// ISR(PORTC_PORT_vect) {
+//     u8 flags       = PORTC.INTFLAGS;
+//     PORTC.INTFLAGS = flags;
+
+//     for(u8 i = 0; i != BTN_COUNT; ++i) {
+//         const InputLayoutT *btn = &_sgInputButtons[i];
+//         if(flags & btn->pinMask) {            
+//             b8 pressed = !(btn->port->IN & btn->pinMask);
+
+//             EventT event;
+//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+//             event.sender  = NULL;    // Or &whateverHere
+//             event.data[0] = btn->id;
+//             event.data[1] = pressed;
+
+//             hkEventFire(&event);
+//         }
+//     }
+// }
+
+// ISR(PORTC_PORT_vect) {
+//     u8 flags       = PORTC.INTFLAGS;
+//     PORTC.INTFLAGS = flags;
+
+//     for(u8 i = 0; i != BTN_COUNT; ++i) {
+//         const InputLayoutT *btn = &_sgInputButtons[i];
+//         if(flags & btn->pinMask) {            
+//             b8 pressed = !(btn->port->IN & btn->pinMask);
+
+//             EventT event;
+//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+//             event.sender  = NULL;    // Or &whateverHere
+//             event.data[0] = btn->id;
+//             event.data[1] = pressed;
+
+//             hkEventFire(&event);
+//         }
+//     }
+// }
+
+// ISR(PORTD_PORT_vect) {
+//     u8 flags       = PORTD.INTFLAGS;
+//     PORTD.INTFLAGS = flags;
+
+//     for(u8 i = 0; i != BTN_COUNT; ++i) {
+//         const InputLayoutT *btn = &_sgInputButtons[i];
+//         if(flags & btn->pinMask) {            
+//             b8 pressed = !(btn->port->IN & btn->pinMask);
+
+//             EventT event;
+//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+//             event.sender  = NULL;    // Or &whateverHere
+//             event.data[0] = btn->id;
+//             event.data[1] = pressed;
+
+//             hkEventFire(&event);
+//         }
+//     }
+// }
+
+// ISR(PORTE_PORT_vect) {
+//     u8 flags       = PORTE.INTFLAGS;
+//     PORTE.INTFLAGS = flags;
+
+//     for(u8 i = 0; i != BTN_COUNT; ++i) {
+//         const InputLayoutT *btn = &_sgInputButtons[i];
+//         if(flags & btn->pinMask) {            
+//             b8 pressed = !(btn->port->IN & btn->pinMask);
+
+//             EventT event;
+//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+//             event.sender  = NULL;    // Or &whateverHere
+//             event.data[0] = btn->id;
+//             event.data[1] = pressed;
+
+//             hkEventFire(&event);
+//         }
+//     }
+// }
+
+// ISR(PORTF_PORT_vect) {
+//     u8 flags       = PORTF.INTFLAGS;
+//     PORTF.INTFLAGS = flags;
+
+//     for(u8 i = 0; i != BTN_COUNT; ++i) {
+//         const InputLayoutT *btn = &_sgInputButtons[i];
+//         if(flags & btn->pinMask) {            
+//             b8 pressed = !(btn->port->IN & btn->pinMask);
+
+//             EventT event;
+//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+//             event.sender  = NULL;    // Or &whateverHere
+//             event.data[0] = btn->id;
+//             event.data[1] = pressed;
+
+//             hkEventFire(&event);
+//         }
+//     }
+// }
 #endif

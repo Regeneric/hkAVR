@@ -12,30 +12,30 @@
 #define LOG_DEBUG 4
 #define LOG_TRACE 5
 
-#ifndef LOG_LEVEL
-  #define LOG_LEVEL LOG_TRACE
+#ifndef HK_LOG_LEVEL
+  #define HK_LOG_LEVEL LOG_INFO
 #endif
 
 
-#if LOG_LEVEL >= LOG_WARN
+#if HK_LOG_LEVEL >= LOG_WARN
     #define LOG_WARN_ENABLED TRUE
 #else
     #define LOG_WARN_ENABLED FALSE
 #endif
 
-#if LOG_LEVEL >= LOG_INFO
+#if HK_LOG_LEVEL >= LOG_INFO
     #define LOG_INFO_ENABLED TRUE
 #else
     #define LOG_INFO_ENABLEd FALSE
 #endif
 
-#if LOG_LEVEL >= LOG_DEBUG
+#if HK_LOG_LEVEL >= LOG_DEBUG
     #define LOG_DEBUG_ENABLED TRUE
 #else
     #define LOG_DEBUG_ENABLED FALSE
 #endif
 
-#if LOG_LEVEL >= LOG_TRACE
+#if HK_LOG_LEVEL >= LOG_TRACE
     #define LOG_TRACE_ENABLED TRUE
 #else
     #define LOG_TRACE_ENABLED FALSE
@@ -60,7 +60,7 @@ typedef enum LogLevelT {
 
 
 b8   hkInitLogging(PlatformStateT* platformState);
-void hkStopLogging(PlatformStateT* platformState);
+void hkStopLogging();
 
 HAPI void hkLogOutput(LogLevelT level, const char* message, ...);
 

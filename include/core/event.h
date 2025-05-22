@@ -33,7 +33,8 @@ typedef enum EventCodeT {
 b8 hkEventPoll(EventT* event);
 HAPI void hkEventProcess(void);
 
-HAPI b8 hkInitEvent(PlatformStateT* platformState);
+HAPI b8   hkInitEvent(PlatformStateT* platformState);
+HAPI void hkStopEvent();
 
 HAPI b8 hkEventRegister(u16 code, void* listener, EventCallbackF callback);
 HAPI b8 hkEventUnregister(u16 code, void* listener, EventCallbackF callback);
