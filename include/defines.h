@@ -91,6 +91,7 @@ STATIC_ASSERT(sizeof(f32) == 4, "Expected f32 to be 4 bytes");
 
 #if defined(__ARM_ARCH) || defined(__arm__) || defined(__aarch64__) || defined(__thumb__)   
     #define HPLATFORM_ARM  TRUE
+    #include "config/arm.h"
 #elif defined(__AVR_ARCH) || defined(__AVR__)        
     #define HPLATFORM_AVR TRUE                                               
     #include "config/avr.h"                                       
