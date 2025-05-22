@@ -1,4 +1,6 @@
 #pragma once
+#include <defines.h>
+
 #if HPLATFORM_AVR
     // GENERAL CONFIG
     #define HK_USE_CRLF            TRUE        // Use \r\n as a newline character

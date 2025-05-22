@@ -10,6 +10,7 @@
         "hkmemory.h": "c",
         "io.h": "c",
         "input.h": "c",
-        "event.h": "c"
+        "event.h": "c",
+        "arm.h": "c"
     }
 }

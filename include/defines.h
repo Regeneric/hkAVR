@@ -54,14 +54,30 @@ typedef int32_t        b32;
 
 #if defined(__GNUC__) && defined(__AVR__)
     #define __avr_gcc__
+    #define HPLATFORM_AVR TRUE
 #endif
 
 #if defined(__GNUC__) && (defined(__arm__) || defined(__aarch64__) || defined(__thumb__))
     #define __arm_gcc__
+    #define HPLATFORM_ARM TRUE
+#endif
+
+#if defined(__GNUC__) && defined(__riscv)
+    #define __riscv_gcc__
+    #undef  __arm_gcc__
+    
+    #define HPLATFORM_RISCV TRUE
+    #undef  HPLATFORM_ARM   TRUE
+
+    #if defined(__riscv_xlen) && (__riscv_xlen == 64)
+        #define __riscv64_gcc__
+    #else
+        #define __riscv32_gcc__
+    #endif
 #endif
 
 
-#if defined(__clang__) || defined(__gcc__) || defined(__avr_gcc__) || defined(__arm_gcc__)
+#if defined(__clang__) || defined(__gcc__) || defined(__avr_gcc__) || defined(__arm_gcc__) || defined(__riscv_gcc__)
     #define STATIC_ASSERT _Static_assert
 #else
     #define STATIC_ASSERT static_assert
@@ -89,10 +105,13 @@ STATIC_ASSERT(sizeof(f32) == 4, "Expected f32 to be 4 bytes");
     STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes");
 #endif
 
-#if defined(__ARM_ARCH) || defined(__arm__) || defined(__aarch64__) || defined(__thumb__)   
+#if defined(HPLATFORM_ARM)
     #define HPLATFORM_ARM  TRUE
     #include "config/arm.h"
-#elif defined(__AVR_ARCH) || defined(__AVR__)        
+#elif defined(HPLATFORM_RISCV)
+    #define HPLATFORM_RISCV TRUE
+    #include "config/riscv.h"
+#elif defined(HPLATFORM_AVR)       
     #define HPLATFORM_AVR TRUE                                               
     #include "config/avr.h"                                       
 #else

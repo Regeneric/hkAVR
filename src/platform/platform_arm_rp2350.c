@@ -14,7 +14,7 @@
 #include <core/input.h>
 #include <platform/platform.h>
 
-#if HK_ALLOW_MALLOC
+#if HK_ALLOW_MALLOC && HPLATFORM_AVR
     #warning WARNING: Using malloc() on AVR is highly discouraged!
 #endif
 

@@ -1,0 +1,512 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:200 (message)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      The target system is: PICO -  - hazard3
+      The host system is: Linux - 6.14.6-arch1-1 - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+      Compiler: /usr/bin/riscv32-unknown-elf-gcc 
+      Build flags: -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb;-mabi=ilp32
+      Id flags:  
+      
+      The output was:
+      1
+      riscv32-unknown-elf-gcc: fatal error: Cannot find suitable multilib set for '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs'/'-mabi=ilp32'
+      compilation terminated.
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /usr/bin/riscv32-unknown-elf-gcc 
+      Build flags: -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb;-mabi=ilp32
+      Id flags: -c 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+      
+      The C compiler identification is GNU, found in:
+        /home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/4.0.2-dirty/CompilerIdC/CMakeCCompilerId.o
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+      Compiler: /usr/bin/riscv32-unknown-elf-g++ 
+      Build flags: -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb;-mabi=ilp32
+      Id flags:  
+      
+      The output was:
+      1
+      riscv32-unknown-elf-g++: fatal error: Cannot find suitable multilib set for '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs'/'-mabi=ilp32'
+      compilation terminated.
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /usr/bin/riscv32-unknown-elf-g++ 
+      Build flags: -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb;-mabi=ilp32
+      Id flags: -c 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+      
+      The CXX compiler identification is GNU, found in:
+        /home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/4.0.2-dirty/CompilerIdCXX/CMakeCXXCompilerId.o
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-et3pnr"
+      binary: "/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-et3pnr"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32"
+      CMAKE_C_FLAGS_DEBUG: "-Og -g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/hkk/Documents/projects/hkAVRm/pico-sdk/cmake"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-et3pnr'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_13c53/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_13c53.dir/build.make CMakeFiles/cmTC_13c53.dir/build
+        make[1]: Entering directory '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-et3pnr'
+        Building C object CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o
+        /usr/bin/riscv32-unknown-elf-gcc   -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32    -v -o CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/riscv32-unknown-elf-gcc
+        Target: riscv32-unknown-elf
+        Configured with: /home/runner/work/riscv-gnu-toolchain/riscv-gnu-toolchain/gcc/configure --target=riscv32-unknown-elf --prefix=/mnt/riscv --disable-shared --disable-threads --enable-languages=c,c++ --with-pkgversion= --with-system-zlib --enable-tls --with-newlib --with-sysroot=/mnt/riscv/riscv32-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././gcc --disable-multilib --with-abi=ilp32d --with-arch=rv32gc --with-tune=rocket --with-isa-spec=20191213 'CFLAGS_FOR_TARGET=-Os    -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os    -mcmodel=medlow'
+        Thread model: single
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.0 () 
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_13c53.dir/'
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/cc1 -quiet -v -iprefix /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/ -isysroot /opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_13c53.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32 -mtune=rocket -misa-spec=20191213 -march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs -version -o /tmp/ccUpYUVe.s
+        GNU C17 () version 14.2.0 (riscv32-unknown-elf)
+        	compiled by GNU C version 13.3.0, GMP version 6.3.0, MPFR version 4.2.1, MPC version 1.3.1, isl version none
+        warning: MPFR header version 4.2.1 differs from library version 4.2.2.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/include"
+        ignoring nonexistent directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/usr/local/include"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include
+        End of search list.
+        Compiler executable checksum: 053423e9c59fd01dd32d47170a9c4a10
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_13c53.dir/'
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/as -v --traditional-format -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs -mabi=ilp32 -misa-spec=20191213 -o CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o /tmp/ccUpYUVe.s
+        GNU assembler version 2.44 (riscv32-unknown-elf) using BFD version (GNU Binutils) 2.44
+        COMPILER_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/
+        LIBRARY_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib/
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_13c53.elf
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_13c53.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/riscv32-unknown-elf-gcc
+        COLLECT_LTO_WRAPPER=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper
+        Target: riscv32-unknown-elf
+        Configured with: /home/runner/work/riscv-gnu-toolchain/riscv-gnu-toolchain/gcc/configure --target=riscv32-unknown-elf --prefix=/mnt/riscv --disable-shared --disable-threads --enable-languages=c,c++ --with-pkgversion= --with-system-zlib --enable-tls --with-newlib --with-sysroot=/mnt/riscv/riscv32-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././gcc --disable-multilib --with-abi=ilp32d --with-arch=rv32gc --with-tune=rocket --with-isa-spec=20191213 'CFLAGS_FOR_TARGET=-Os    -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os    -mcmodel=medlow'
+        Thread model: single
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.0 () 
+        COMPILER_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/
+        LIBRARY_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib/
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-nostdlib' '-v' '-o' 'cmTC_13c53.elf' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'cmTC_13c53.elf.'
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/collect2 -plugin /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/liblto_plugin.so -plugin-opt=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccqfYuGh.res --sysroot=/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf -melf32lriscv -X -o cmTC_13c53.elf -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0 -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib --build-id=none CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o
+        /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/ld: warning: cannot find entry symbol _start; defaulting to 00010094
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-nostdlib' '-v' '-o' 'cmTC_13c53.elf' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'cmTC_13c53.elf.'
+        /usr/bin/riscv32-unknown-elf-gcc -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32  -Wl,--build-id=none -nostdlib  -v CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o -o cmTC_13c53.elf
+        make[1]: Leaving directory '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-et3pnr'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:191 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include]
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed]
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include]
+        end of search list found
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include] ==> [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0/include]
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed] ==> [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed]
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include]
+        implicit include dirs: [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0/include;/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed;/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:227 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-et3pnr']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_13c53/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_13c53.dir/build.make CMakeFiles/cmTC_13c53.dir/build]
+        ignore line: [make[1]: Entering directory '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-et3pnr']
+        ignore line: [Building C object CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/usr/bin/riscv32-unknown-elf-gcc   -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32    -v -o CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/riscv32-unknown-elf-gcc]
+        ignore line: [Target: riscv32-unknown-elf]
+        ignore line: [Configured with: /home/runner/work/riscv-gnu-toolchain/riscv-gnu-toolchain/gcc/configure --target=riscv32-unknown-elf --prefix=/mnt/riscv --disable-shared --disable-threads --enable-languages=c c++ --with-pkgversion= --with-system-zlib --enable-tls --with-newlib --with-sysroot=/mnt/riscv/riscv32-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././gcc --disable-multilib --with-abi=ilp32d --with-arch=rv32gc --with-tune=rocket --with-isa-spec=20191213 'CFLAGS_FOR_TARGET=-Os    -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os    -mcmodel=medlow']
+        ignore line: [Thread model: single]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.2.0 () ]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_13c53.dir/']
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/cc1 -quiet -v -iprefix /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/ -isysroot /opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_13c53.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32 -mtune=rocket -misa-spec=20191213 -march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs -version -o /tmp/ccUpYUVe.s]
+        ignore line: [GNU C17 () version 14.2.0 (riscv32-unknown-elf)]
+        ignore line: [	compiled by GNU C version 13.3.0  GMP version 6.3.0  MPFR version 4.2.1  MPC version 1.3.1  isl version none]
+        ignore line: [warning: MPFR header version 4.2.1 differs from library version 4.2.2.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/include"]
+        ignore line: [ignoring nonexistent directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/usr/local/include"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include]
+        ignore line: [End of search list.]
+        ignore line: [Compiler executable checksum: 053423e9c59fd01dd32d47170a9c4a10]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_13c53.dir/']
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/as -v --traditional-format -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs -mabi=ilp32 -misa-spec=20191213 -o CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o /tmp/ccUpYUVe.s]
+        ignore line: [GNU assembler version 2.44 (riscv32-unknown-elf) using BFD version (GNU Binutils) 2.44]
+        ignore line: [COMPILER_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/]
+        ignore line: [LIBRARY_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_13c53.elf]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_13c53.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/riscv32-unknown-elf-gcc]
+        ignore line: [COLLECT_LTO_WRAPPER=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper]
+        ignore line: [Target: riscv32-unknown-elf]
+        ignore line: [Configured with: /home/runner/work/riscv-gnu-toolchain/riscv-gnu-toolchain/gcc/configure --target=riscv32-unknown-elf --prefix=/mnt/riscv --disable-shared --disable-threads --enable-languages=c c++ --with-pkgversion= --with-system-zlib --enable-tls --with-newlib --with-sysroot=/mnt/riscv/riscv32-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././gcc --disable-multilib --with-abi=ilp32d --with-arch=rv32gc --with-tune=rocket --with-isa-spec=20191213 'CFLAGS_FOR_TARGET=-Os    -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os    -mcmodel=medlow']
+        ignore line: [Thread model: single]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.2.0 () ]
+        ignore line: [COMPILER_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/]
+        ignore line: [LIBRARY_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-nostdlib' '-v' '-o' 'cmTC_13c53.elf' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'cmTC_13c53.elf.']
+        link line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/collect2 -plugin /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/liblto_plugin.so -plugin-opt=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccqfYuGh.res --sysroot=/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf -melf32lriscv -X -o cmTC_13c53.elf -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0 -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib --build-id=none CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o]
+          arg [/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccqfYuGh.res] ==> ignore
+          arg [--sysroot=/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf] ==> ignore
+          arg [-melf32lriscv] ==> ignore
+          arg [-X] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_13c53.elf] ==> ignore
+          arg [-L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0] ==> dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0]
+          arg [-L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc] ==> dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc]
+          arg [-L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib] ==> dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib]
+          arg [-L/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib] ==> dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib]
+          arg [--build-id=none] ==> ignore
+          arg [CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o] ==> ignore
+        ignore line: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/ld: warning: cannot find entry symbol _start]
+        ignore line: [ defaulting to 00010094]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-nostdlib' '-v' '-o' 'cmTC_13c53.elf' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'cmTC_13c53.elf.']
+        ignore line: [/usr/bin/riscv32-unknown-elf-gcc -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32  -Wl --build-id=none -nostdlib  -v CMakeFiles/cmTC_13c53.dir/CMakeCCompilerABI.c.o -o cmTC_13c53.elf]
+        ignore line: [make[1]: Leaving directory '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-et3pnr']
+        ignore line: []
+        ignore line: []
+        collapse library dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0] ==> [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0]
+        collapse library dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc] ==> [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc]
+        collapse library dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/lib]
+        collapse library dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/lib]
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0;/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc;/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-RCv2qz"
+      binary: "/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-RCv2qz"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32"
+      CMAKE_CXX_FLAGS_DEBUG: "-Og -g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/home/hkk/Documents/projects/hkAVRm/pico-sdk/cmake"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-RCv2qz'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_590cb/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_590cb.dir/build.make CMakeFiles/cmTC_590cb.dir/build
+        make[1]: Entering directory '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-RCv2qz'
+        Building CXX object CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/riscv32-unknown-elf-g++   -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32    -v -o CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/riscv32-unknown-elf-g++
+        Target: riscv32-unknown-elf
+        Configured with: /home/runner/work/riscv-gnu-toolchain/riscv-gnu-toolchain/gcc/configure --target=riscv32-unknown-elf --prefix=/mnt/riscv --disable-shared --disable-threads --enable-languages=c,c++ --with-pkgversion= --with-system-zlib --enable-tls --with-newlib --with-sysroot=/mnt/riscv/riscv32-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././gcc --disable-multilib --with-abi=ilp32d --with-arch=rv32gc --with-tune=rocket --with-isa-spec=20191213 'CFLAGS_FOR_TARGET=-Os    -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os    -mcmodel=medlow'
+        Thread model: single
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.0 () 
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_590cb.dir/'
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/cc1plus -quiet -v -iprefix /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/ -isysroot /opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_590cb.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32 -mtune=rocket -misa-spec=20191213 -march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs -version -o /tmp/ccTdAMDc.s
+        GNU C++17 () version 14.2.0 (riscv32-unknown-elf)
+        	compiled by GNU C version 13.3.0, GMP version 6.3.0, MPFR version 4.2.1, MPC version 1.3.1, isl version none
+        warning: MPFR header version 4.2.1 differs from library version 4.2.2.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/riscv32-unknown-elf"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/backward"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/include"
+        ignoring nonexistent directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/usr/local/include"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include"
+        ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/riscv32-unknown-elf
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/backward
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include
+        End of search list.
+        Compiler executable checksum: 4ba2b0caf22a05d90c2136e48392aee5
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_590cb.dir/'
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/as -v --traditional-format -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs -mabi=ilp32 -misa-spec=20191213 -o CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccTdAMDc.s
+        GNU assembler version 2.44 (riscv32-unknown-elf) using BFD version (GNU Binutils) 2.44
+        COMPILER_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/
+        LIBRARY_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib/
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_590cb.elf
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_590cb.dir/link.txt --verbose=1
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/riscv32-unknown-elf-g++
+        COLLECT_LTO_WRAPPER=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper
+        Target: riscv32-unknown-elf
+        Configured with: /home/runner/work/riscv-gnu-toolchain/riscv-gnu-toolchain/gcc/configure --target=riscv32-unknown-elf --prefix=/mnt/riscv --disable-shared --disable-threads --enable-languages=c,c++ --with-pkgversion= --with-system-zlib --enable-tls --with-newlib --with-sysroot=/mnt/riscv/riscv32-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././gcc --disable-multilib --with-abi=ilp32d --with-arch=rv32gc --with-tune=rocket --with-isa-spec=20191213 'CFLAGS_FOR_TARGET=-Os    -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os    -mcmodel=medlow'
+        Thread model: single
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.0 () 
+        COMPILER_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/
+        LIBRARY_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib/
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-nostdlib' '-v' '-o' 'cmTC_590cb.elf' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'cmTC_590cb.elf.'
+         /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/collect2 -plugin /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/liblto_plugin.so -plugin-opt=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccT6Z5Kc.res --sysroot=/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf -melf32lriscv -X -o cmTC_590cb.elf -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0 -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib --build-id=none CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o
+        /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/ld: warning: cannot find entry symbol _start; defaulting to 00010094
+        COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-nostdlib' '-v' '-o' 'cmTC_590cb.elf' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'cmTC_590cb.elf.'
+        /usr/bin/riscv32-unknown-elf-g++ -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32  -Wl,--build-id=none -nostdlib  -v CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_590cb.elf
+        make[1]: Leaving directory '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-RCv2qz'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:191 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0]
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/riscv32-unknown-elf]
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/backward]
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include]
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed]
+          add: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include]
+        end of search list found
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include/c++/14.2.0]
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/riscv32-unknown-elf] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include/c++/14.2.0/riscv32-unknown-elf]
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/backward] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include/c++/14.2.0/backward]
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include] ==> [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0/include]
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed] ==> [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed]
+        collapse include dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include]
+        implicit include dirs: [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include/c++/14.2.0;/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include/c++/14.2.0/riscv32-unknown-elf;/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include/c++/14.2.0/backward;/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0/include;/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed;/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:227 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "pico-extras/CMakeLists.txt:12 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
+        ignore line: [Change Dir: '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-RCv2qz']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_590cb/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_590cb.dir/build.make CMakeFiles/cmTC_590cb.dir/build]
+        ignore line: [make[1]: Entering directory '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-RCv2qz']
+        ignore line: [Building CXX object CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/riscv32-unknown-elf-g++   -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32    -v -o CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/riscv32-unknown-elf-g++]
+        ignore line: [Target: riscv32-unknown-elf]
+        ignore line: [Configured with: /home/runner/work/riscv-gnu-toolchain/riscv-gnu-toolchain/gcc/configure --target=riscv32-unknown-elf --prefix=/mnt/riscv --disable-shared --disable-threads --enable-languages=c c++ --with-pkgversion= --with-system-zlib --enable-tls --with-newlib --with-sysroot=/mnt/riscv/riscv32-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././gcc --disable-multilib --with-abi=ilp32d --with-arch=rv32gc --with-tune=rocket --with-isa-spec=20191213 'CFLAGS_FOR_TARGET=-Os    -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os    -mcmodel=medlow']
+        ignore line: [Thread model: single]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.2.0 () ]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_590cb.dir/']
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/cc1plus -quiet -v -iprefix /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/ -isysroot /opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_590cb.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32 -mtune=rocket -misa-spec=20191213 -march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs -version -o /tmp/ccTdAMDc.s]
+        ignore line: [GNU C++17 () version 14.2.0 (riscv32-unknown-elf)]
+        ignore line: [	compiled by GNU C version 13.3.0  GMP version 6.3.0  MPFR version 4.2.1  MPC version 1.3.1  isl version none]
+        ignore line: [warning: MPFR header version 4.2.1 differs from library version 4.2.2.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/riscv32-unknown-elf"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/backward"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/include"]
+        ignore line: [ignoring nonexistent directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/usr/local/include"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/../../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include"]
+        ignore line: [ignoring duplicate directory "/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/riscv32-unknown-elf]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include/c++/14.2.0/backward]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/include-fixed]
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/include]
+        ignore line: [End of search list.]
+        ignore line: [Compiler executable checksum: 4ba2b0caf22a05d90c2136e48392aee5]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_590cb.dir/']
+        ignore line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/as -v --traditional-format -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs -mabi=ilp32 -misa-spec=20191213 -o CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccTdAMDc.s]
+        ignore line: [GNU assembler version 2.44 (riscv32-unknown-elf) using BFD version (GNU Binutils) 2.44]
+        ignore line: [COMPILER_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/]
+        ignore line: [LIBRARY_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-v' '-o' 'CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_590cb.elf]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_590cb.dir/link.txt --verbose=1]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/riscv32-unknown-elf-g++]
+        ignore line: [COLLECT_LTO_WRAPPER=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper]
+        ignore line: [Target: riscv32-unknown-elf]
+        ignore line: [Configured with: /home/runner/work/riscv-gnu-toolchain/riscv-gnu-toolchain/gcc/configure --target=riscv32-unknown-elf --prefix=/mnt/riscv --disable-shared --disable-threads --enable-languages=c c++ --with-pkgversion= --with-system-zlib --enable-tls --with-newlib --with-sysroot=/mnt/riscv/riscv32-unknown-elf --with-native-system-header-dir=/include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=.././gcc --disable-multilib --with-abi=ilp32d --with-arch=rv32gc --with-tune=rocket --with-isa-spec=20191213 'CFLAGS_FOR_TARGET=-Os    -mcmodel=medlow' 'CXXFLAGS_FOR_TARGET=-Os    -mcmodel=medlow']
+        ignore line: [Thread model: single]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.2.0 () ]
+        ignore line: [COMPILER_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/]
+        ignore line: [LIBRARY_PATH=/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib/:/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-nostdlib' '-v' '-o' 'cmTC_590cb.elf' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'cmTC_590cb.elf.']
+        link line: [ /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/collect2 -plugin /opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/liblto_plugin.so -plugin-opt=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccT6Z5Kc.res --sysroot=/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf -melf32lriscv -X -o cmTC_590cb.elf -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0 -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib -L/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib --build-id=none CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o]
+          arg [/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/opt/riscv32-gnu-toolchain-elf-bin/bin/../libexec/gcc/riscv32-unknown-elf/14.2.0/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccT6Z5Kc.res] ==> ignore
+          arg [--sysroot=/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf] ==> ignore
+          arg [-melf32lriscv] ==> ignore
+          arg [-X] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_590cb.elf] ==> ignore
+          arg [-L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0] ==> dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0]
+          arg [-L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc] ==> dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc]
+          arg [-L/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib] ==> dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib]
+          arg [-L/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib] ==> dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib]
+          arg [--build-id=none] ==> ignore
+          arg [CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+        ignore line: [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/ld: warning: cannot find entry symbol _start]
+        ignore line: [ defaulting to 00010094]
+        ignore line: [COLLECT_GCC_OPTIONS='-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb' '-mabi=ilp32' '-nostdlib' '-v' '-o' 'cmTC_590cb.elf' '-mtune=rocket' '-misa-spec=20191213' '-march=rv32imac_zicsr_zifencei_zba_zbb_zbkb_zbs' '-dumpdir' 'cmTC_590cb.elf.']
+        ignore line: [/usr/bin/riscv32-unknown-elf-g++ -march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32  -Wl --build-id=none -nostdlib  -v CMakeFiles/cmTC_590cb.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_590cb.elf]
+        ignore line: [make[1]: Leaving directory '/home/hkk/Documents/projects/hkAVRm/cmake-build/CMakeFiles/CMakeScratch/TryCompile-RCv2qz']
+        ignore line: []
+        ignore line: []
+        collapse library dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0] ==> [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0]
+        collapse library dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc] ==> [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc]
+        collapse library dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/lib] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/lib]
+        collapse library dir [/opt/riscv32-gnu-toolchain-elf-bin/bin/../riscv32-unknown-elf/lib] ==> [/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/lib]
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: [/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc/riscv32-unknown-elf/14.2.0;/opt/riscv32-gnu-toolchain-elf-bin/lib/gcc;/opt/riscv32-gnu-toolchain-elf-bin/riscv32-unknown-elf/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:1271 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineASMCompiler.cmake:139 (CMAKE_DETERMINE_COMPILER_ID_VENDOR)"
+      - "CMakeLists.txt:14 (project)"
+    message: |
+      Checking whether the ASM compiler is GNU using "--version" matched "(GNU assembler)|(GCC)|(Free Software Foundation)":
+      riscv32-unknown-elf-gcc () 14.2.0
+      Copyright (C) 2024 Free Software Foundation, Inc.
+      This is free software; see the source for copying conditions.  There is NO
+      warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+      
+...
