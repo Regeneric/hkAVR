@@ -7,9 +7,6 @@
 
 #include <containers/darray.h>
 
-// #include <avr/io.h>
-#include <util/delay.h>
-
 b8 hkOnEvent(const EventT* event, void* listener);
 b8 hkOnButton(const EventT* event, void* listener);
 
@@ -71,7 +68,7 @@ b8 hkOnEvent(const EventT* event, void* listener) {
     switch(event->code) {
         case EC_PLATFORM_STOP: {
             HINFO("EC_PLATFORM_STOP event recieved; shutting down...");
-            plStop(platformState);
+            plShutdown(&platformState);
             return TRUE;
         }
     } return TRUE;
@@ -86,16 +83,40 @@ b8 hkOnButton(const EventT* event, void* listener) {
     switch(event->code) {
         case EC_BTN_PRESSED: {
             HDEBUG("hkOnButton(): Button %u %s", buttonID, buttonState ? "pressed" : "released");
-
-            if(buttonID == BTN_ACCEPT) {
-                EventT e;
-                e.code    = EC_PLATFORM_STOP;
-                e.data[0] = 0;
-                e.data[1] = 0;
-                e.sender  = NULL;
-            
-                hkEventFire(&e);
+            switch(buttonID) {
+                case BTN_ACCEPT: {
+                    EventT e;
+                    e.code    = EC_PLATFORM_STOP;
+                    e.data[0] = 0;
+                    e.data[1] = 0;
+                    e.sender  = NULL;
+                
+                    hkEventFire(&e);
+                } default: return TRUE;
             }
-        } return TRUE;
+        } default: return TRUE;
     } return TRUE;
 }
+
+// b8 hkOnButton(const EventT* event, void* listener) {
+//     HTRACE("main.c -> hkOnButton(const EventT*, void*):b8");
+
+//     u8 buttonID    = (u8)event->data[0];
+//     b8 buttonState = (b8)event->data[1];
+
+//     switch(event->code) {
+//         case EC_BTN_PRESSED: {
+//             HDEBUG("hkOnButton(): Button %u %s", buttonID, buttonState ? "pressed" : "released");
+
+//             if(buttonID == BTN_ACCEPT) {
+//                 EventT e;
+//                 e.code    = EC_PLATFORM_STOP;
+//                 e.data[0] = 0;
+//                 e.data[1] = 0;
+//                 e.sender  = NULL;
+            
+//                 hkEventFire(&e);
+//             }
+//         } return TRUE;
+//     } return TRUE;
+// }

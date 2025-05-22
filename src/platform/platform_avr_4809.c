@@ -176,13 +176,14 @@ b8 plStartup(PlatformStateT *platformState, u32 baudRate) {
     return TRUE;
 }
 
-void plStop(PlatformStateT* platformState) {
+void plShutdown(PlatformStateT* platformState) {
     HTRACE("platform_avr_4809.c -> plStop(PlatformStateT*):void");
 
     platformState->statusFlags = (u32)0xFFFF;
     InternalStateT* internalState = (InternalStateT*)platformState->internalState;
     internalState->baudRate  = 0;
 
+    cli();
     hkStopInput();
     hkStopEvent();
     hkStopTimer0(); PL_SET_FLAGGED(platformState->statusFlags, PL_TIMER);

@@ -6,10 +6,10 @@
     #define HK_USE_SCREEN          FALSE       // If you wanna use some LCD or OLED
     #define HK_BAUD_RATE           115200      // Terminal baud rate
     #define HK_USE_PROGMEM         TRUE        // Use PROGMEM when it is possible
-    #define HK_LOG_MSG_MAX_LEN     80          // Maximum length of a single log message ()
-    #define HK_KEEP_TRACK_OF_TIME  FALSE       // Keep accurate track of time sinc uC has started
-    #define HK_LOG_LEVEL           LOG_TRACE   // TRACE | DEBUG | INFO | WARN | ERROR
-    #define HK_USE_ISR_INPUT       FALSE       // Use hardwawre interrupts to read buttons
+    #define HK_LOG_MSG_MAX_LEN     80          // Maximum length of a single log message
+    #define HK_KEEP_TRACK_OF_TIME  FALSE       // Keep accurate track of time since uC has started
+    #define HK_LOG_LEVEL           LOG_DEBUG   // TRACE | DEBUG | INFO | WARN | ERROR
+    #define HK_USE_ISR_INPUT       FALSE       // Use hardwawre interrupts to read buttons - NO EFFECT FOR NOW
 
     // INPUT
     #define HK_INPUT_REG           PORTC       // Input register

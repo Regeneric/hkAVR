@@ -28,4 +28,5 @@ HAPI void* hkZeroMem(void* block, u16 size);
 HAPI void* hkCopyMem(void* dest, const void* source, u16 size);
 HAPI void* hkSetMem(void* dest, i32 value, u16 size);
 
-HAPI char* hkMemoryUsage();
+// #define HK_MEM_HEAVY_DBG TRUE
+HAPI char* hkDebugMemoryUsage();
