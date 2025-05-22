@@ -9,6 +9,7 @@ typedef struct InputLayoutT {
     u8 id;
     u8 pinMask;
     u8 isc;    
+    const char* name;
 } InputLayoutT;
 
 #define X(name,pin) BTN_##name,

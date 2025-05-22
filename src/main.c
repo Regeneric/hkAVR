@@ -16,10 +16,10 @@ int main() {
     plStartup(&platformState, HK_BAUD_RATE);
 
     static InputLayoutT buttons[BTN_COUNT] = {
-        {&HK_INPUT_REG, BTN_ACCEPT, HK_ACCEPT_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm},
-        {&HK_INPUT_REG, BTN_CANCEL, HK_CANCEL_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm},
-        {&HK_INPUT_REG, BTN_NEXT  , HK_NEXT_BTN  , PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm},
-        {&HK_INPUT_REG, BTN_PREV  , HK_PREV_BTN  , PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm}
+        {&HK_INPUT_REG, BTN_ACCEPT, HK_ACCEPT_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm, "PORTC"},
+        {&HK_INPUT_REG, BTN_CANCEL, HK_CANCEL_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm, "MAIN INPUT REGISTER"},
+        {&HK_INPUT_REG, BTN_NEXT  , HK_NEXT_BTN  , PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm, NULL},
+        {&HK_INPUT_REG, BTN_PREV  , HK_PREV_BTN  , PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm, NULL}
     };
 
     if(!hkInitInput(&platformState, buttons)) {
@@ -72,7 +72,7 @@ b8 hkOnEvent(const EventT* event, void* listener) {
             HINFO("EC_PLATFORM_STOP event recieved; shutting down...");
             plShutdown(&platformState);
             return TRUE;
-        }
+        } break; default: return TRUE;
     } return TRUE;
 }
 
@@ -94,9 +94,9 @@ b8 hkOnButton(const EventT* event, void* listener) {
                     e.sender  = NULL;
                 
                     hkEventFire(&e);
-                } default: return TRUE;
+                } break; default: return TRUE;
             }
-        } default: return TRUE;
+        } break; default: return TRUE;
     } return TRUE;
 }
 

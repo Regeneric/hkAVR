@@ -65,8 +65,10 @@ void _hkInputConfig(PlatformStateT* platformState, InputLayoutT* input) {
 
     cli();
     input->port->DIRCLR = input->pinMask;
-    HDEBUG("Pin 0x%x as input", input->pinMask);
-
+    
+    if(input->name != NULL) HDEBUG("Pin 0x%x of %s as input", input->pinMask, input->name);
+    else HDEBUG("Pin 0x%x as input", input->pinMask);
+ 
     volatile u8* pinCfg = &input->port->PIN0CTRL;               // Address of PIN0CTRL register
     for(u8 i = 0; i != 8; ++i) {                                // Iterate over registers
         if(input->pinMask & (1 << i)) pinCfg[i] = input->isc;   // Check which pin was passed to the function and set the ISC
