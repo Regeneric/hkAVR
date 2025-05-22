@@ -39,7 +39,7 @@ typedef struct MemBlockHeaderT {
 #define HEADER_SIZE ALIGN(sizeof(MemBlockHeaderT))
 // enum {HEADER_SIZE = ALIGN(sizeof(MemBlockHeaderT))};
 
-#define MEM_STATIC_POOL_SIZE 2048
+#define MEM_STATIC_POOL_SIZE 16
 typedef struct MemStaticT {
     uint8_t  data[MEM_STATIC_POOL_SIZE];
     uint8_t* heapStart;

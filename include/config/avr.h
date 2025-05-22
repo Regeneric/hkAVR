@@ -23,11 +23,11 @@
     #define HK_BUTTON_LIST          \
         X(ACCEPT,   HK_ACCEPT_BTN)  \
         X(CANCEL,   HK_CANCEL_BTN)  \
-        X(NEXT,     HK_NEXT_BTN)    \
-        X(PREVIOUS, HK_PREV_BTN)
+        X(NEXT  ,   HK_NEXT_BTN)    \
+        X(PREV  ,   HK_PREV_BTN)
     #define HK_MAX_BUTTONS       ((sizeof((int[]){HK_BUTTON_LIST})/sizeof(int)))
 
     // USE AT OWN RISK 
-    #define HK_ALLOW_MALLOC        FALSE       // Allow malloc()
+    #define HK_ALLOW_MALLOC        TRUE        // Allow malloc()
     #define HK_MEM_HEAVY_DBG       FALSE       // There are some memory heavy debug functions
 #endif

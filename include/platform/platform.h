@@ -65,8 +65,9 @@ void plFlagError(PlatformStateT* platformState, u8 flag);
 b8   plInitLogging(PlatformStateT* platformState);
 void plStopLogging(PlatformStateT* platformState);
 
-b8 plInitInput();
-b8 plStopInput();
+b8   plInitInput(PlatformStateT* platformState, void* platformInput);
+void plStopInput(PlatformStateT* platformState);
+void plInputConfig(PlatformStateT* platformState, void* platformInput);
 
 b8 plInitUSART(u32 baudRate);
 

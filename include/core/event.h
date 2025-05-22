@@ -1,8 +1,6 @@
 #pragma once
 #include <defines.h>
 
-#include <platform/platform.h>
-
 #define MAX_EVENT_CODES  (EC_MAX_EVENT_CODE + 1)
 
 typedef struct EventT {  
@@ -30,7 +28,7 @@ typedef enum EventCodeT {
 b8 hkEventPoll(EventT* event);
 HAPI void hkEventProcess(void);
 
-HAPI b8   hkInitEvent(PlatformStateT* platformState);
+HAPI b8   hkInitEvent(void* platformState);
 HAPI void hkStopEvent();
 
 HAPI b8 hkEventRegister(u16 code, void* listener, EventCallbackF callback);

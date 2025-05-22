@@ -17,9 +17,9 @@ static EventT* _sEventQueue;
 static PlatformStateT* eventPlatformState;
 
 
-b8 hkInitEvent(PlatformStateT* platformState) {
+b8 hkInitEvent(void* platformState) {
     HTRACE("event.c -> hkEventInit(PlatformStateT*):b8");
-    eventPlatformState = platformState;
+    eventPlatformState = (PlatformStateT*)platformState;
 
     if(PL_IS_RDY(eventPlatformState->statusFlags, PL_EVENT)) {
         HDEBUG("hkInitEvent(): Events already initialized");
@@ -51,7 +51,7 @@ void hkStopEvent() {
     HTRACE("event.c -> hkStopEvent():void");
     HDEBUG("hkStopEvent(): Stopping event subsystem.");
     
-    for(u8 i = 0; i < MAX_EVENT_CODES; ++i) hkDarrayDestroy(_sListeners[i]);
+    for(u8 i = 0; i != MAX_EVENT_CODES; ++i) hkDarrayDestroy(_sListeners[i]);
     hkDarrayDestroy(_sEventQueue);
 
     PL_SET_FLAGGED(eventPlatformState->statusFlags, PL_INPUT);

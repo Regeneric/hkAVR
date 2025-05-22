@@ -38,18 +38,54 @@ typedef struct InternalStateT {
     FILE outStream;
 } InternalStateT;
 
+static InputLayoutT* _sgInputButtons;
+
 
 // ****************************************************************************
 // HELPER FUNCTIONS
 // ----------------------------------------------------------------------------
-void hkDeepSleep() {
+static inline void _hkDisablePortInput(InputLayoutT* input) {
+    HTRACE("platform_avr_4809.c -> _hkDisablePortInput(InputLayoutT*):void");
+
+    input->port->DIRCLR = input->pinMask;
+    volatile u8* pincfg = input->port->PIN0CTRL;
+    for(u8 i = 0; i != 8; ++i) {
+        if(pincfg[i] & input->pinMask) pincfg[i] = PORT_ISC_INPUT_DISABLE_gc;
+    }
+}
+
+void _hkInputConfig(PlatformStateT* platformState, InputLayoutT* input) {
+    HTRACE("platform_avr_4809.c -> _hkInputConfig(PlatformStateT*, InputLayoutT*):void");
+
+    if(!PL_IS_RDY(platformState->statusFlags, PL_INPUT)) {
+        HERROR("_hkInputConfig(): Input subsystem mus be initialized first!");
+        PL_SET_FLAGGED(platformState->statusFlags, PL_GENERAL_ERROR);
+        return;
+    }
+
+    cli();
+    input->port->DIRCLR = input->pinMask;
+    HDEBUG("Pin 0x%x as input", input->pinMask);
+
+    volatile u8* pinCfg = &input->port->PIN0CTRL;               // Address of PIN0CTRL register
+    for(u8 i = 0; i != 8; ++i) {                                // Iterate over registers
+        if(input->pinMask & (1 << i)) pinCfg[i] = input->isc;   // Check which pin was passed to the function and set the ISC
+    }
+
+    input->port->INTFLAGS = input->pinMask;
+    sei();
+    
+    return;
+}
+
+void _hkDeepSleep() {
     VREF.CTRLA = 0;
     SLPCTRL.CTRLA = SLEEP_MODE_PWR_DOWN | SLPCTRL_SEN_bm;
     __asm__ __volatile__("sleep"); 
 }
 
-b8 hkInitTimer0(void) {
-    HTRACE("platform_avr_4809.c -> hkInitTimer0(void):void");
+b8 _hkInitTimer0(void) {
+    HTRACE("platform_avr_4809.c -> _hkInitTimer0(void):void");
 
     TCB0.CTRLA    = TCB_CLKSEL_CLKDIV2_gc | TCB_ENABLE_bm;
     TCB0.CCMP     = (F_CPU/2/1000) - 1;
@@ -60,9 +96,9 @@ b8 hkInitTimer0(void) {
     return TRUE;
 }
 
-b8 hkStopTimer0(void) {
-    HTRACE("platform_avr_4809.c -> hkStopTimer0(void):void"); 
-    HDEBUG("hkStopTimer0(): Stopping Timer0.");
+b8 _hkStopTimer0(void) {
+    HTRACE("platform_avr_4809.c -> _hkStopTimer0(void):void"); 
+    HDEBUG("_hkStopTimer0(): Stopping Timer0.");
 
     TCB0.CTRLA    = 0;
     TCB0.CCMP     = 0;
@@ -80,7 +116,7 @@ ISR(TCB0_INT_vect) {
 }
 
 
-void hkTransmitUSART(u8 data) {
+void _hkTransmitUSART(u8 data) {
     FLAG_TX;
     if(!(USART3.CTRLB & USART_TXEN_bm)) {
         // USART3 TX not enabled
@@ -97,12 +133,12 @@ void hkTransmitUSART(u8 data) {
     _FLAG_TX;
 }
 
-int hkPrintUSART(char c, FILE* stream) {
+int _hkPrintUSART(char c, FILE* stream) {
     #if HK_USE_CRLF
-        if(c == '\n') hkTransmitUSART((u8)'\r');
-        hkTransmitUSART((u8)c);
+        if(c == '\n') _hkTransmitUSART((u8)'\r');
+        _hkTransmitUSART((u8)c);
     #else
-        hkTransmitUSART((u8)c);
+        _hkTransmitUSART((u8)c);
     #endif
 
     return 0;
@@ -144,7 +180,7 @@ b8 plStartup(PlatformStateT *platformState, u32 baudRate) {
     } else PL_SET_RDY(platformState->statusFlags, PL_MEMORY);
     HINFO("Memory subsystem initialized.");
 
-    if(!hkInitTimer0()) {
+    if(!_hkInitTimer0()) {
         // millis() timer failed to init
         HERROR("plStartup(): Timer0 failed to initialize.");
         PL_SET_ERR(platformState->statusFlags, PL_TIMER);
@@ -184,13 +220,13 @@ void plShutdown(PlatformStateT* platformState) {
     internalState->baudRate  = 0;
 
     cli();
-    hkStopInput();
+    plStopInput(platformState);
     hkStopEvent();
-    hkStopTimer0(); PL_SET_FLAGGED(platformState->statusFlags, PL_TIMER);
+    _hkStopTimer0(); PL_SET_FLAGGED(platformState->statusFlags, PL_TIMER);
     hkStopMemory();
     hkStopLogging();
 
-    hkDeepSleep();
+    _hkDeepSleep();
 }
 
 b8 plMessageStream(PlatformStateT* platformState) {
@@ -349,7 +385,7 @@ b8 plInitLogging(PlatformStateT* platformState) {
         return FALSE;
     }
 
-    fdev_setup_stream(&internalState->outStream, hkPrintUSART, NULL, _FDEV_SETUP_WRITE);
+    fdev_setup_stream(&internalState->outStream, _hkPrintUSART, NULL, _FDEV_SETUP_WRITE);
     stdout = &internalState->outStream;
     stderr = &internalState->outStream;
 
@@ -384,146 +420,155 @@ void plConsoleWriteError(const char* message) {
 }
 
 
+b8 plInitInput(PlatformStateT* platformState, void* platformInput) {
+    HTRACE("platform_avr_4809.c -> plInitInput(PlatformStateT*, InputLayoutT*):b8");
 
+    InputLayoutT* input = (InputLayoutT*)platformInput; 
 
+    PL_SET_RDY(platformState->statusFlags, PL_INPUT);
+    _sgInputButtons = input;
+    
+    for(u8 i = 0; i != BTN_COUNT; ++i) _hkInputConfig(platformState, &input[i]);
 
-// ISR(PORTA_PORT_vect) {
-//     u8 flags       = PORTA.INTFLAGS;
-//     PORTA.INTFLAGS = flags;
+    return TRUE;
+}
 
-//     for(u8 i = 0; i != BTN_COUNT; ++i) {
-//         const InputLayoutT *btn = &_sgInputButtons[i];
-//         if(flags & btn->pinMask) {            
-//             b8 pressed = !(btn->port->IN & btn->pinMask);
+void plStopInput(PlatformStateT* platformState) {
+    HTRACE("platform_avr_4809.c -> plStopInput(InputLayoutT*):void");
 
-//             EventT event;
-//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
-//             event.sender  = NULL;    // Or &whateverHere
-//             event.data[0] = btn->id;
-//             event.data[1] = pressed;
+    _hkDisablePortInput(_sgInputButtons);
 
-//             hkEventFire(&event);
-//         }
-//     }
-// }
+    PL_SET_FLAGGED(platformState->statusFlags, PL_INPUT);
+    cli();
+}
 
-// ISR(PORTB_PORT_vect) {
-//     u8 flags       = PORTB.INTFLAGS;
-//     PORTB.INTFLAGS = flags;
+void plInputConfig(PlatformStateT* platformState, void* platformInput) {
+    HTRACE("platform_avr_4809.c -> plInputConfig(InputLayoutT*):void");
 
-//     for(u8 i = 0; i != BTN_COUNT; ++i) {
-//         const InputLayoutT *btn = &_sgInputButtons[i];
-//         if(flags & btn->pinMask) {            
-//             b8 pressed = !(btn->port->IN & btn->pinMask);
+    InputLayoutT* input = (InputLayoutT*)platformInput; 
+    _hkInputConfig(platformState, input);
+}
 
-//             EventT event;
-//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
-//             event.sender  = NULL;    // Or &whateverHere
-//             event.data[0] = btn->id;
-//             event.data[1] = pressed;
+// ****************************************************************************
+// INTERRUPTS
+// ----------------------------------------------------------------------------
+ISR(PORTA_PORT_vect) {
+    u8 flags       = PORTA.INTFLAGS;
+    PORTA.INTFLAGS = flags;
 
-//             hkEventFire(&event);
-//         }
-//     }
-// }
+    for(u8 i = 0; i != BTN_COUNT; ++i) {
+        const InputLayoutT *btn = &_sgInputButtons[i];
+        if(flags & btn->pinMask) {            
+            b8 pressed = !(btn->port->IN & btn->pinMask);
 
-// ISR(PORTC_PORT_vect) {
-//     u8 flags       = PORTC.INTFLAGS;
-//     PORTC.INTFLAGS = flags;
+            EventT event;
+            event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+            event.sender  = NULL;    // Or &whateverHere
+            event.data[0] = btn->id;
+            event.data[1] = pressed;
 
-//     for(u8 i = 0; i != BTN_COUNT; ++i) {
-//         const InputLayoutT *btn = &_sgInputButtons[i];
-//         if(flags & btn->pinMask) {            
-//             b8 pressed = !(btn->port->IN & btn->pinMask);
+            hkEventFire(&event);
+        }
+    }
+}
 
-//             EventT event;
-//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
-//             event.sender  = NULL;    // Or &whateverHere
-//             event.data[0] = btn->id;
-//             event.data[1] = pressed;
+ISR(PORTB_PORT_vect) {
+    u8 flags       = PORTB.INTFLAGS;
+    PORTB.INTFLAGS = flags;
 
-//             hkEventFire(&event);
-//         }
-//     }
-// }
+    for(u8 i = 0; i != BTN_COUNT; ++i) {
+        const InputLayoutT *btn = &_sgInputButtons[i];
+        if(flags & btn->pinMask) {            
+            b8 pressed = !(btn->port->IN & btn->pinMask);
 
-// ISR(PORTC_PORT_vect) {
-//     u8 flags       = PORTC.INTFLAGS;
-//     PORTC.INTFLAGS = flags;
+            EventT event;
+            event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+            event.sender  = NULL;    // Or &whateverHere
+            event.data[0] = btn->id;
+            event.data[1] = pressed;
 
-//     for(u8 i = 0; i != BTN_COUNT; ++i) {
-//         const InputLayoutT *btn = &_sgInputButtons[i];
-//         if(flags & btn->pinMask) {            
-//             b8 pressed = !(btn->port->IN & btn->pinMask);
+            hkEventFire(&event);
+        }
+    }
+}
 
-//             EventT event;
-//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
-//             event.sender  = NULL;    // Or &whateverHere
-//             event.data[0] = btn->id;
-//             event.data[1] = pressed;
+ISR(PORTC_PORT_vect) {
+    u8 flags       = PORTC.INTFLAGS;
+    PORTC.INTFLAGS = flags;
 
-//             hkEventFire(&event);
-//         }
-//     }
-// }
+    for(u8 i = 0; i != BTN_COUNT; ++i) {
+        const InputLayoutT *btn = &_sgInputButtons[i];
+        if(flags & btn->pinMask) {            
+            b8 pressed = !(btn->port->IN & btn->pinMask);
 
-// ISR(PORTD_PORT_vect) {
-//     u8 flags       = PORTD.INTFLAGS;
-//     PORTD.INTFLAGS = flags;
+            EventT event;
+            event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+            event.sender  = NULL;    // Or &whateverHere
+            event.data[0] = btn->id;
+            event.data[1] = pressed;
 
-//     for(u8 i = 0; i != BTN_COUNT; ++i) {
-//         const InputLayoutT *btn = &_sgInputButtons[i];
-//         if(flags & btn->pinMask) {            
-//             b8 pressed = !(btn->port->IN & btn->pinMask);
+            hkEventFire(&event);
+        }
+    }
+}
 
-//             EventT event;
-//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
-//             event.sender  = NULL;    // Or &whateverHere
-//             event.data[0] = btn->id;
-//             event.data[1] = pressed;
+ISR(PORTD_PORT_vect) {
+    u8 flags       = PORTD.INTFLAGS;
+    PORTD.INTFLAGS = flags;
 
-//             hkEventFire(&event);
-//         }
-//     }
-// }
+    for(u8 i = 0; i != BTN_COUNT; ++i) {
+        const InputLayoutT *btn = &_sgInputButtons[i];
+        if(flags & btn->pinMask) {            
+            b8 pressed = !(btn->port->IN & btn->pinMask);
 
-// ISR(PORTE_PORT_vect) {
-//     u8 flags       = PORTE.INTFLAGS;
-//     PORTE.INTFLAGS = flags;
+            EventT event;
+            event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+            event.sender  = NULL;    // Or &whateverHere
+            event.data[0] = btn->id;
+            event.data[1] = pressed;
 
-//     for(u8 i = 0; i != BTN_COUNT; ++i) {
-//         const InputLayoutT *btn = &_sgInputButtons[i];
-//         if(flags & btn->pinMask) {            
-//             b8 pressed = !(btn->port->IN & btn->pinMask);
+            hkEventFire(&event);
+        }
+    }
+}
 
-//             EventT event;
-//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
-//             event.sender  = NULL;    // Or &whateverHere
-//             event.data[0] = btn->id;
-//             event.data[1] = pressed;
+ISR(PORTE_PORT_vect) {
+    u8 flags       = PORTE.INTFLAGS;
+    PORTE.INTFLAGS = flags;
 
-//             hkEventFire(&event);
-//         }
-//     }
-// }
+    for(u8 i = 0; i != BTN_COUNT; ++i) {
+        const InputLayoutT *btn = &_sgInputButtons[i];
+        if(flags & btn->pinMask) {            
+            b8 pressed = !(btn->port->IN & btn->pinMask);
 
-// ISR(PORTF_PORT_vect) {
-//     u8 flags       = PORTF.INTFLAGS;
-//     PORTF.INTFLAGS = flags;
+            EventT event;
+            event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+            event.sender  = NULL;    // Or &whateverHere
+            event.data[0] = btn->id;
+            event.data[1] = pressed;
 
-//     for(u8 i = 0; i != BTN_COUNT; ++i) {
-//         const InputLayoutT *btn = &_sgInputButtons[i];
-//         if(flags & btn->pinMask) {            
-//             b8 pressed = !(btn->port->IN & btn->pinMask);
+            hkEventFire(&event);
+        }
+    }
+}
 
-//             EventT event;
-//             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
-//             event.sender  = NULL;    // Or &whateverHere
-//             event.data[0] = btn->id;
-//             event.data[1] = pressed;
+ISR(PORTF_PORT_vect) {
+    u8 flags       = PORTF.INTFLAGS;
+    PORTF.INTFLAGS = flags;
 
-//             hkEventFire(&event);
-//         }
-//     }
-// }
+    for(u8 i = 0; i != BTN_COUNT; ++i) {
+        const InputLayoutT *btn = &_sgInputButtons[i];
+        if(flags & btn->pinMask) {            
+            b8 pressed = !(btn->port->IN & btn->pinMask);
+
+            EventT event;
+            event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
+            event.sender  = NULL;    // Or &whateverHere
+            event.data[0] = btn->id;
+            event.data[1] = pressed;
+
+            hkEventFire(&event);
+        }
+    }
+}
 #endif

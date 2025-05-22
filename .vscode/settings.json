@@ -8,6 +8,8 @@
         "asserts.h": "c",
         "defines.h": "c",
         "hkmemory.h": "c",
-        "io.h": "c"
+        "io.h": "c",
+        "input.h": "c",
+        "event.h": "c"
     }
 }

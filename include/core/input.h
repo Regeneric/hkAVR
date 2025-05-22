@@ -2,6 +2,7 @@
 #include <defines.h>
 
 #include <core/event.h>
+#include <platform/platform.h>
 
 typedef struct InputLayoutT {
     PORT_t* port;
@@ -20,7 +21,7 @@ typedef struct InputLayoutT {
 #define HK_DEFINE_INPUT(port, name, pin, isc) {&(port), BTN_##name, (pin), (isc)}
 
 b8   hkInitInput(PlatformStateT* platformState, InputLayoutT* input);
-void hkStopInput();
+void hkStopInput(InputLayoutT* input);
 
 // Usage:
 // hkInputConfig(&PORTC, PIN4_bm | PIN6_bm, PORT_ISC_BOTHEDGES_gc);

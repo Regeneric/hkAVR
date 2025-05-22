@@ -15,12 +15,14 @@ static PlatformStateT platformState;
 int main() {
     plStartup(&platformState, HK_BAUD_RATE);
 
-    static const InputLayoutT buttons[BTN_COUNT] = {
+    static InputLayoutT buttons[BTN_COUNT] = {
         {&HK_INPUT_REG, BTN_ACCEPT, HK_ACCEPT_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm},
-        {&HK_INPUT_REG, BTN_CANCEL, HK_CANCEL_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm}
+        {&HK_INPUT_REG, BTN_CANCEL, HK_CANCEL_BTN, PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm},
+        {&HK_INPUT_REG, BTN_NEXT  , HK_NEXT_BTN  , PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm},
+        {&HK_INPUT_REG, BTN_PREV  , HK_PREV_BTN  , PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm}
     };
 
-    if(!hkInitInput(&platformState, &buttons)) {
+    if(!hkInitInput(&platformState, buttons)) {
         HERROR("plStartup(): Input subsystem failed to initialize.");
     } else HINFO("Input subsystem initialized.");
 
