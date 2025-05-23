@@ -1,0 +1,176 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // AVR Platform
+    {
+      "label": "Configure AVR Debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S", ".",
+        "-B", "build/avr/debug",
+        "-DBUILD_FOR_AVR=ON",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_TOOLCHAIN_FILE=cmake/avr-toolchain.cmake"
+      ],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Build AVR Debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/avr/debug"
+      ],
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "Configure AVR Release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S", ".",
+        "-B", "build/avr/release",
+        "-DBUILD_FOR_AVR=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_TOOLCHAIN_FILE=cmake/avr-toolchain.cmake"
+      ],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Build AVR Release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/avr/release"
+      ],
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "Configure + Build AVR Debug",
+      "dependsOn": [
+        "Configure AVR Debug",
+        "Build AVR Debug"
+      ],
+      "group": { "kind": "build", "isDefault": true }
+    },
+
+    // ARM Platform
+    {
+      "label": "Configure ARM Debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S", ".",
+        "-B", "build/arm/debug",
+        "-DBUILD_FOR_ARM=ON",
+        "-DCMAKE_BUILD_TYPE=Debug"
+      ],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Build ARM Debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/arm/debug"
+      ],
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "Configure ARM Release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S", ".",
+        "-B", "build/arm/release",
+        "-DBUILD_FOR_ARM=ON",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Build ARM Release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/arm/release"
+      ],
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+
+    // RISC-V Platform
+    {
+      "label": "Configure RISC-V Debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S", ".",
+        "-B", "build/riscv/debug",
+        "-DBUILD_FOR_RISCV=ON",
+        "-DCMAKE_BUILD_TYPE=Debug"
+      ],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Build RISC-V Debug",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/riscv/debug"
+      ],
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Configure RISC-V Release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S", ".",
+        "-B", "build/riscv/release",
+        "-DBUILD_FOR_RISCV=ON",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Build RISC-V Release",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/riscv/release"
+      ],
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    }
+  ]
+}

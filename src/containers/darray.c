@@ -64,7 +64,7 @@ void* _hkDarrayPush(void* array, const void* valuePtr) {
     u16 stride = hkDarrayStride(array);
     if(length >= hkDarrayCapacity(array)) array = _hkDarrayResize(array, length+stride);
 
-    u16 addr = (u16)array;
+    u16* addr = (u16*)array;
     addr += (length*stride);
     hkCopyMem((void*)addr, valuePtr, stride);
     _hkDarrayFieldSet(array, DARRAY_LENGTH, length+1);
@@ -78,7 +78,7 @@ void _hkDarrayPop(void* array, void* dest) {
     u16 length = hkDarrayLength(array);
     u16 stride = hkDarrayStride(array);
     
-    u16 addr   = (u16)array;
+    u16* addr = (u16*)array;
     addr += ((length+1)*stride);
     hkCopyMem(dest, (void*)addr, stride);
     _hkDarrayFieldSet(array, DARRAY_LENGTH, length-1);
@@ -99,7 +99,7 @@ void* _hkDarrayInsertAt(void* array, u16 index, void* valuePtr) {
     if(length >= hkDarrayCapacity(array)) array = _hkDarrayResize(array, length+stride);
 
     // Move everything from addr and move it to addr+1
-    u16 addr = (u16)array;
+    u16* addr = (u16*)array;
     if(index != length-1) {
         hkCopyMem(
             (void*)(addr + ((index+1)*stride)),
@@ -124,7 +124,7 @@ void* _hkDarrayPopAt(void* array, u16 index, void* dest) {
         return array;
     }
 
-    u16 addr = (u16)array;
+    u16* addr = (u16*)array;
     hkCopyMem(dest, (void*)(addr + (index*stride)), stride);
     
     // Move everything from addr+1 and move it to addr

@@ -53,23 +53,30 @@ typedef int32_t        b32;
 
 
 #if defined(__GNUC__) && defined(__AVR__)
-    #define __avr_gcc__
-    #define HPLATFORM_AVR TRUE
+    #ifndef __avr_gcc__
+        #define __avr_gcc__
+    #endif
 #endif
 
 #if defined(__GNUC__) && (defined(__arm__) || defined(__aarch64__) || defined(__thumb__))
-    #define __arm_gcc__
-    #define HPLATFORM_ARM TRUE
+    #ifndef __arm_gcc__
+        #define __arm_gcc__
+    #endif
 #endif
 
 #if defined(__GNUC__) && defined(__riscv)
-    #define __riscv_gcc__    
-    #define HPLATFORM_RISCV TRUE
+    #ifndef     
+        #define __riscv_gcc__  
+    #endif
 
     #if defined(__riscv_xlen) && (__riscv_xlen == 64)
-        #define __riscv64_gcc__
+        #ifndef __riscv64_gcc__
+            #define __riscv64_gcc__
+        #endif
     #else
-        #define __riscv32_gcc__
+        #ifndef __riscv32_gcc__
+            #define __riscv32_gcc__
+        #endif
     #endif
 #endif
 
@@ -103,13 +110,19 @@ STATIC_ASSERT(sizeof(f32) == 4, "Expected f32 to be 4 bytes");
 #endif
 
 #if defined(HPLATFORM_ARM)
-    #define HPLATFORM_ARM  TRUE
+    #ifndef HPLATFORM_ARM
+        #define HPLATFORM_ARM  TRUE
+    #endif
     #include "config/arm.h"
 #elif defined(HPLATFORM_RISCV)
-    #define HPLATFORM_RISCV TRUE
+    #ifndef HPLATFORM_RISCV
+        #define HPLATFORM_RISCV TRUE
+    #endif
     #include "config/riscv.h"
 #elif defined(HPLATFORM_AVR)       
-    #define HPLATFORM_AVR TRUE                                               
+    #ifndef HPLATFORM_AVR
+        #define HPLATFORM_AVR TRUE
+    #endif
     #include "config/avr.h"                                       
 #else
     #error "Unknown platform — please add your own HPLATFORM_*"
@@ -135,6 +148,7 @@ STATIC_ASSERT(sizeof(f32) == 4, "Expected f32 to be 4 bytes");
 
 #if defined(_DEBUG) && defined(HPLATFORM_AVR) 
     #include <avr/io.h>
+    #include <util/delay.h>
 
     #ifdef HPLATFORM_AVR_4809
         #define PLATFORM_DBG    PIN0_bm
@@ -164,14 +178,14 @@ STATIC_ASSERT(sizeof(f32) == 4, "Expected f32 to be 4 bytes");
 
         __attribute__((noreturn))
         static inline void hkHardwareDebug(u32 flags) {
-            plSleep(1000);
+            _delay_ms(1000);
 
             for (u8 i = 0; i < 32; ++i) {
                 if(flags & (UINT32_C(1) << i)) PORTB.OUTSET = PLATFORM_DBG;
                 else PORTB.OUTCLR = PLATFORM_DBG;
 
                 // Short flash for each bit
-                plSleep(100);
+                _delay_ms(1000);
             } PORTB.OUTCLR = PLATFORM_DBG;
 
             while(1);

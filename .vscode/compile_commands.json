@@ -1,0 +1,56 @@
+[
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/lib/hkmalloc",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -I/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -o CMakeFiles/hkmalloc.dir/hkmalloc.c.obj -c /home/hkk/Documents/projects/hkRISCv/lib/hkmalloc/hkmalloc.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc/hkmalloc.c",
+  "output": "lib/hkmalloc/CMakeFiles/hkmalloc.dir/hkmalloc.c.obj"
+},
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/src",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -I/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -O0 -g -std=gnu11 -Wall -ffunction-sections -fdata-sections -ffreestanding -o CMakeFiles/hkRISCv.dir/main.c.obj -c /home/hkk/Documents/projects/hkRISCv/src/main.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/src/main.c",
+  "output": "src/CMakeFiles/hkRISCv.dir/main.c.obj"
+},
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/src/containers",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -o CMakeFiles/hkcontainers.dir/darray.c.obj -c /home/hkk/Documents/projects/hkRISCv/src/containers/darray.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/src/containers/darray.c",
+  "output": "src/containers/CMakeFiles/hkcontainers.dir/darray.c.obj"
+},
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/src/core",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -I/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -o CMakeFiles/hkcore.dir/event.c.obj -c /home/hkk/Documents/projects/hkRISCv/src/core/event.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/src/core/event.c",
+  "output": "src/core/CMakeFiles/hkcore.dir/event.c.obj"
+},
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/src/core",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -I/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -o CMakeFiles/hkcore.dir/hkmemory.c.obj -c /home/hkk/Documents/projects/hkRISCv/src/core/hkmemory.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/src/core/hkmemory.c",
+  "output": "src/core/CMakeFiles/hkcore.dir/hkmemory.c.obj"
+},
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/src/core",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -I/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -o CMakeFiles/hkcore.dir/hkstring.c.obj -c /home/hkk/Documents/projects/hkRISCv/src/core/hkstring.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/src/core/hkstring.c",
+  "output": "src/core/CMakeFiles/hkcore.dir/hkstring.c.obj"
+},
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/src/core",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -I/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -o CMakeFiles/hkcore.dir/input.c.obj -c /home/hkk/Documents/projects/hkRISCv/src/core/input.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/src/core/input.c",
+  "output": "src/core/CMakeFiles/hkcore.dir/input.c.obj"
+},
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/src/core",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -I/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -o CMakeFiles/hkcore.dir/logger.c.obj -c /home/hkk/Documents/projects/hkRISCv/src/core/logger.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/src/core/logger.c",
+  "output": "src/core/CMakeFiles/hkcore.dir/logger.c.obj"
+},
+{
+  "directory": "/home/hkk/Documents/projects/hkRISCv/build/avr/debug/src/platform",
+  "command": "/usr/bin/avr-gcc -DDEBUG -DHEXPORT -DHPLATFORM_AVR -DHPLATFORM_AVR_4809 -D_DEBUG -D__avr_gcc__ -I/home/hkk/Documents/projects/hkRISCv/include -I/home/hkk/Documents/projects/hkRISCv/lib/hkmalloc -mmcu=atmega4809 -DF_CPU=20000000UL -g -std=gnu11 -o CMakeFiles/hkplatform.dir/platform_avr_4809.c.obj -c /home/hkk/Documents/projects/hkRISCv/src/platform/platform_avr_4809.c",
+  "file": "/home/hkk/Documents/projects/hkRISCv/src/platform/platform_avr_4809.c",
+  "output": "src/platform/CMakeFiles/hkplatform.dir/platform_avr_4809.c.obj"
+}
+]

@@ -50,7 +50,7 @@ static inline void _hkDisablePortInput(InputLayoutT* input) {
     PORT_t* port = (PORT_t*)input->port;
     port->DIRCLR = input->pinMask;
 
-    volatile u8* pincfg = port->PIN0CTRL;
+    volatile u8* pincfg = (u8*)port->PIN0CTRL;
     for(u8 i = 0; i != 8; ++i) {
         if(pincfg[i] & input->pinMask) pincfg[i] = PORT_ISC_INPUT_DISABLE_gc;
     }
@@ -296,7 +296,7 @@ void* plZeroMem(void* block, u16 size) {
     plSetMem(block, 0, size);
 }
 
-void* plCopyMem(void* dest, void* source, u16 size) {
+void* plCopyMem(void* dest, const void* source, u16 size) {
     HTRACE("platform_avr_4809.c -> plCopyMem(void*, void*, u16):void");
 
     if(dest == NULL) {
@@ -345,16 +345,16 @@ void plSleep(u16 ms) {
 }
 
 
-void plSetFlag(PlatformStateT* platformState, u8 flag) {
+void plSetFlag(PlatformStateT* platformState, u32 flag) {
     PL_SET_FLAG(platformState->statusFlags, flag);
 }
-void plClearFlag(PlatformStateT* platformState, u8 flag) {
+void plClearFlag(PlatformStateT* platformState, u32 flag) {
     PL_CLEAR_FLAG(platformState->statusFlags, flag);
 }
-void plFlagReady(PlatformStateT* platformState, u8 flag) {
+void plFlagReady(PlatformStateT* platformState, u32 flag) {
     PL_SET_RDY(platformState->statusFlags, flag);
 }
-void plFlagClear(PlatformStateT* platformState, u8 flag) {
+void plFlagClear(PlatformStateT* platformState, u32 flag) {
     PL_SET_ERR(platformState->statusFlags, flag);
 }
 

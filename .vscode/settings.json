@@ -11,6 +11,12 @@
         "io.h": "c",
         "input.h": "c",
         "event.h": "c",
-        "arm.h": "c"
-    }
+        "arm.h": "c",
+        "riscv.h": "c"
+    },
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/lib/hkmalloc"
+    ]
 }
