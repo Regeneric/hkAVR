@@ -5,13 +5,32 @@ add_subdirectory(platform)
 add_executable(${PROJECT_NAME} main.c)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INC_DIR})
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         hkcontainers
         hkcore
         hkplatform
         hkmalloc
+
+    PUBLIC
+        pico_stdlib 
+        pico_multicore
+        pico_binary_info
+
+        hardware_gpio
+        hardware_irq
+        # hardware_spi
+        # hardware_i2c
+        hardware_flash
+        hardware_timer
+        hardware_sync
 )
+
+pico_enable_stdio_usb(${PROJECT_NAME} 1)
+pico_enable_stdio_uart(${PROJECT_NAME} 0)
+
+pico_add_extra_outputs(${PROJECT_NAME})
 
 
 if(BUILD_FOR_AVR)

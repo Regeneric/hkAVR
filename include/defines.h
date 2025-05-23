@@ -65,7 +65,7 @@ typedef int32_t        b32;
 #endif
 
 #if defined(__GNUC__) && defined(__riscv)
-    #ifndef     
+    #ifndef __riscv_gcc__   
         #define __riscv_gcc__  
     #endif
 

@@ -171,6 +171,35 @@
         "kind": "build",
         "isDefault": false
       }
+    },
+    {
+      "label": "Flash RP2350 via OpenOCD",
+      "type": "shell",
+      "command": "openocd",
+      "args": [
+        "-s", "tcl",
+        "-f", "interface/cmsis-dap.cfg",
+        "-f", "target/rp2350.cfg",
+        "-c", "program build/riscv/debug/hkRISCv.elf verify reset exit"
+      ],
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Clean Build Directory",
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-rf",
+        "${workspaceFolder}/build"
+      ],
+      "problemMatcher": []
     }
   ]
 }

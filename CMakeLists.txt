@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.17)
-project(hkRISCv C)
 
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -8,10 +7,19 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 
-# set(CMAKE_C_FLAGS         "-std=gnu11")
-# set(CMAKE_C_FLAGS_DEBUG   "-O0 -g")
-# set(CMAKE_C_FLAGS_RELEASE "-Os")
+set(PICO_BOARD pico2)
+set(PICO_PLATFORM rp2350-riscv)     # RISC-V
+# set(PICO_PLATFORM rp2350-arm-s)   # ARM
 
+set(PICO_SDK_PATH ${CMAKE_SOURCE_DIR}/pico-sdk)
+set(PICO_EXTRAS_PATH ${CMAKE_SOURCE_DIR}/pico-extras)
+
+include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+include(${PICO_EXTRAS_PATH}/external/pico_extras_import.cmake)
+
+project(hkRISCv C CXX ASM)
+
+pico_sdk_init()
 
 message(STATUS "Build type:     ${CMAKE_BUILD_TYPE}")
 # message(STATUS "Compiler flags: ${CMAKE_C_FLAGS}")
@@ -20,6 +28,9 @@ message(STATUS "Build type:     ${CMAKE_BUILD_TYPE}")
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# Use C++17 everywhere
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Export compile_commands.json for VSCode/IntelliSense
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -58,6 +69,10 @@ endif()
 
 
 add_compile_definitions(HEXPORT)  # TODO: for now it's hardcoded
+
+add_compile_options(
+    -Wno-format                   # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
+)
 
 
 # External libs
