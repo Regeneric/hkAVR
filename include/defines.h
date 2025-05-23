@@ -63,11 +63,8 @@ typedef int32_t        b32;
 #endif
 
 #if defined(__GNUC__) && defined(__riscv)
-    #define __riscv_gcc__
-    #undef  __arm_gcc__
-    
+    #define __riscv_gcc__    
     #define HPLATFORM_RISCV TRUE
-    #undef  HPLATFORM_ARM   TRUE
 
     #if defined(__riscv_xlen) && (__riscv_xlen == 64)
         #define __riscv64_gcc__

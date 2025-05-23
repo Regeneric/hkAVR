@@ -47,8 +47,10 @@ static InputLayoutT* _sgInputButtons;
 static inline void _hkDisablePortInput(InputLayoutT* input) {
     HTRACE("platform_avr_4809.c -> _hkDisablePortInput(InputLayoutT*):void");
 
-    input->port->DIRCLR = input->pinMask;
-    volatile u8* pincfg = input->port->PIN0CTRL;
+    PORT_t* port = (PORT_t*)input->port;
+    port->DIRCLR = input->pinMask;
+
+    volatile u8* pincfg = port->PIN0CTRL;
     for(u8 i = 0; i != 8; ++i) {
         if(pincfg[i] & input->pinMask) pincfg[i] = PORT_ISC_INPUT_DISABLE_gc;
     }
@@ -64,17 +66,19 @@ void _hkInputConfig(PlatformStateT* platformState, InputLayoutT* input) {
     }
 
     cli();
-    input->port->DIRCLR = input->pinMask;
+
+    PORT_t* port = (PORT_t*)input->port;
+    port->DIRCLR = input->pinMask;
     
     if(input->name != NULL) HDEBUG("Pin 0x%x of %s as input", input->pinMask, input->name);
     else HDEBUG("Pin 0x%x as input", input->pinMask);
  
-    volatile u8* pinCfg = &input->port->PIN0CTRL;               // Address of PIN0CTRL register
+    volatile u8* pinCfg = &port->PIN0CTRL;               // Address of PIN0CTRL register
     for(u8 i = 0; i != 8; ++i) {                                // Iterate over registers
         if(input->pinMask & (1 << i)) pinCfg[i] = input->isc;   // Check which pin was passed to the function and set the ISC
     }
 
-    input->port->INTFLAGS = input->pinMask;
+    port->INTFLAGS = input->pinMask;
     sei();
     
     return;
@@ -460,8 +464,10 @@ ISR(PORTA_PORT_vect) {
 
     for(u8 i = 0; i != BTN_COUNT; ++i) {
         const InputLayoutT *btn = &_sgInputButtons[i];
+        PORT_t* port = (PORT_t*)btn->port;
+
         if(flags & btn->pinMask) {            
-            b8 pressed = !(btn->port->IN & btn->pinMask);
+            b8 pressed = !(port->IN & btn->pinMask);
 
             EventT event;
             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
@@ -480,8 +486,10 @@ ISR(PORTB_PORT_vect) {
 
     for(u8 i = 0; i != BTN_COUNT; ++i) {
         const InputLayoutT *btn = &_sgInputButtons[i];
+        PORT_t* port = (PORT_t*)btn->port;
+
         if(flags & btn->pinMask) {            
-            b8 pressed = !(btn->port->IN & btn->pinMask);
+            b8 pressed = !(port->IN & btn->pinMask);
 
             EventT event;
             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
@@ -500,8 +508,10 @@ ISR(PORTC_PORT_vect) {
 
     for(u8 i = 0; i != BTN_COUNT; ++i) {
         const InputLayoutT *btn = &_sgInputButtons[i];
+        PORT_t* port = (PORT_t*)btn->port;
+
         if(flags & btn->pinMask) {            
-            b8 pressed = !(btn->port->IN & btn->pinMask);
+            b8 pressed = !(port->IN & btn->pinMask);
 
             EventT event;
             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
@@ -520,8 +530,10 @@ ISR(PORTD_PORT_vect) {
 
     for(u8 i = 0; i != BTN_COUNT; ++i) {
         const InputLayoutT *btn = &_sgInputButtons[i];
+        PORT_t* port = (PORT_t*)btn->port;
+
         if(flags & btn->pinMask) {            
-            b8 pressed = !(btn->port->IN & btn->pinMask);
+            b8 pressed = !(port->IN & btn->pinMask);
 
             EventT event;
             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
@@ -540,8 +552,10 @@ ISR(PORTE_PORT_vect) {
 
     for(u8 i = 0; i != BTN_COUNT; ++i) {
         const InputLayoutT *btn = &_sgInputButtons[i];
+        PORT_t* port = (PORT_t*)btn->port;
+
         if(flags & btn->pinMask) {            
-            b8 pressed = !(btn->port->IN & btn->pinMask);
+            b8 pressed = !(port->IN & btn->pinMask);
 
             EventT event;
             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
@@ -560,8 +574,10 @@ ISR(PORTF_PORT_vect) {
 
     for(u8 i = 0; i != BTN_COUNT; ++i) {
         const InputLayoutT *btn = &_sgInputButtons[i];
+        PORT_t* port = (PORT_t*)btn->port;
+
         if(flags & btn->pinMask) {            
-            b8 pressed = !(btn->port->IN & btn->pinMask);
+            b8 pressed = !(port->IN & btn->pinMask);
 
             EventT event;
             event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;

@@ -6,7 +6,6 @@
 
 typedef struct InputLayoutT {
     void* port;
-    // PORT_t* port;   // change it to void*
     u8 id;
     u8 pinMask;
     u8 isc;    
