@@ -1,4 +1,19 @@
-int main() {return 0;}
+#include <pico/stdlib.h>
+#include <hardware/gpio.h>
+
+int main() {
+    gpio_init(16);
+    gpio_set_dir(16, true);
+
+    while(1) {
+        gpio_put(16, true);
+        sleep_ms(1000);
+        gpio_put(16, false);
+        sleep_ms(1000);
+    }
+
+    return 0;
+}
 
 
 

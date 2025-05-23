@@ -25,6 +25,10 @@ target_link_libraries(${PROJECT_NAME}
         hardware_flash
         hardware_timer
         hardware_sync
+
+        # pico_cyw43_arch_none 
+        # pico_lwipallapps 
+        # pico_lwipcore
 )
 
 pico_enable_stdio_usb(${PROJECT_NAME} 1)

@@ -173,14 +173,35 @@
       }
     },
     {
-      "label": "Flash RP2350 via OpenOCD",
+      "label": "Flash RP2350 via OpenOCD (RISC-V | Debug)",
+      "type": "shell",
+      "command": "openocd",
+      "args": [
+        "-s", "tcl",
+        "-f", "interface/cmsis-dap.cfg",
+        "-f", "target/rp2350-riscv.cfg",
+        "-c", "adapter speed 3000",
+        "-c", "program build/riscv/debug/src/hkRISCv.elf verify reset exit"
+      ],
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Flash RP2350 via OpenOCD (ARM | Debug)",
       "type": "shell",
       "command": "openocd",
       "args": [
         "-s", "tcl",
         "-f", "interface/cmsis-dap.cfg",
         "-f", "target/rp2350.cfg",
-        "-c", "program build/riscv/debug/hkRISCv.elf verify reset exit"
+        "-c", "adapter speed 3000",
+        "-c", "program build/riscv/debug/src/hkRISCv.elf verify reset exit"
       ],
       "problemMatcher": [],
       "group": "none",
