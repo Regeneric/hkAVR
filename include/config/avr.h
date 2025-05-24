@@ -2,6 +2,9 @@
 #include <defines.h>
 
 #if HPLATFORM_AVR
+    // PLATFOM SETTINGS
+    #define HPLATFORM_AVR_4809                 // ATMega 4809
+
     // GENERAL CONFIG
     #define HK_USE_CRLF            TRUE        // Use \r\n as a newline character
     #define HK_TIMER_SLEEP         TRUE        // Use TIMER0 for sleep instead of _delay_ms()
@@ -12,6 +15,7 @@
     #define HK_KEEP_TRACK_OF_TIME  FALSE       // Keep accurate track of time since uC has started
     #define HK_LOG_LEVEL           LOG_DEBUG   // TRACE | DEBUG | INFO | WARN | ERROR
     #define HK_USE_ISR_INPUT       FALSE       // Use hardwawre interrupts to read buttons - NO EFFECT FOR NOW
+    #define HK_LOG_OUTPUT          UART        // UART | USB - NO EFFECT FOR NOW
 
     // INPUT
     #define HK_INPUT_REG           PORTC       // Input register

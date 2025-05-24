@@ -1,19 +1,65 @@
+#include <stdio.h>
+
 #include <pico/stdlib.h>
 #include <hardware/gpio.h>
 
+#include <defines.h>
+
+#include <core/logger.h>
+#include <core/event.h>
+#include <core/input.h>
+#include <platform/platform.h>
+
+#include <containers/darray.h>
+
+static PlatformStateT* platformState;
+
 int main() {
-    gpio_init(16);
-    gpio_set_dir(16, true);
+    plStartup(platformState, HK_BAUD_RATE);
+
+    static InputLayoutT buttons[BTN_COUNT] = {
+        {NULL, BTN_ACCEPT, HK_ACCEPT_BTN, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, "GPIO"},
+        {NULL, BTN_CANCEL, HK_CANCEL_BTN, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, "MAIN INPUT REGISTER"},
+        {NULL, BTN_NEXT  , HK_NEXT_BTN  , GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, NULL},
+        {NULL, BTN_PREV  , HK_PREV_BTN  , GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, NULL}
+    };
+
+    if(!hkInitInput(platformState, buttons)) {
+        HERROR("plStartup(): Input subsystem failed to initialize.");
+    } else HINFO("Input subsystem initialized.");
+
+    // hkEventRegister(0x69            , 0, hkOnEvent);
+    // hkEventRegister(EC_PLATFORM_STOP, 0, hkOnEvent);
+    // hkEventRegister(EC_BTN_PRESSED  , 0, hkOnButton);
+    // hkEventRegister(EC_BTN_RELEASED , 0, hkOnButton);
 
     while(1) {
-        gpio_put(16, true);
-        sleep_ms(1000);
-        gpio_put(16, false);
-        sleep_ms(1000);
+        // printf("test\n");
+        // sleep_ms(1000);
+        HINFO("TEST");
+        plSleep(1000);
+        // sleep_ms(1000);
     }
-
-    return 0;
 }
+
+
+
+// #include <pico/stdlib.h>
+// #include <hardware/gpio.h>
+
+// int main() {
+//     gpio_init(16);
+//     gpio_set_dir(16, true);
+
+//     while(1) {
+//         gpio_put(16, true);
+//         sleep_ms(1000);
+//         gpio_put(16, false);
+//         sleep_ms(1000);
+//     }
+
+//     return 0;
+// }
 
 
 
@@ -41,7 +87,7 @@ int main() {
 //         {&HK_INPUT_REG, BTN_PREV  , HK_PREV_BTN  , PORT_ISC_BOTHEDGES_gc | PORT_PULLUPEN_bm, NULL}
 //     };
 
-//     if(!hkInitInput(&platformState, buttons)) {
+//     if(!hkInitInput(platformState, buttons)) {
 //         HERROR("plStartup(): Input subsystem failed to initialize.");
 //     } else HINFO("Input subsystem initialized.");
 

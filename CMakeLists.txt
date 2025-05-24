@@ -1,10 +1,15 @@
 cmake_minimum_required(VERSION 3.17)
 
-
+# BUILD TYPE
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING
       "Choose the type of build (Debug or Release)" FORCE)
 endif()
+
+
+# PLATFORM SELECTION
+
+
 
 
 set(PICO_BOARD pico2)

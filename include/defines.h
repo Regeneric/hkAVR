@@ -53,18 +53,30 @@ typedef int32_t        b32;
 
 
 #if defined(__GNUC__) && defined(__AVR__)
+    #ifndef HPLATFORM_AVR
+        #define HPLATFORM_AVR
+    #endif
+    
     #ifndef __avr_gcc__
         #define __avr_gcc__
     #endif
 #endif
 
 #if defined(__GNUC__) && (defined(__arm__) || defined(__aarch64__) || defined(__thumb__))
+    #ifndef HPLATFORM_ARM
+        #define HPLATFORM_ARM
+    #endif
+
     #ifndef __arm_gcc__
         #define __arm_gcc__
     #endif
 #endif
 
 #if defined(__GNUC__) && defined(__riscv)
+    #ifndef HPLATFORM_RISCV
+        #define HPLATFORM_RISCV
+    #endif
+
     #ifndef __riscv_gcc__   
         #define __riscv_gcc__  
     #endif
@@ -110,19 +122,10 @@ STATIC_ASSERT(sizeof(f32) == 4, "Expected f32 to be 4 bytes");
 #endif
 
 #if defined(HPLATFORM_ARM)
-    #ifndef HPLATFORM_ARM
-        #define HPLATFORM_ARM  TRUE
-    #endif
     #include "config/arm.h"
 #elif defined(HPLATFORM_RISCV)
-    #ifndef HPLATFORM_RISCV
-        #define HPLATFORM_RISCV TRUE
-    #endif
     #include "config/riscv.h"
 #elif defined(HPLATFORM_AVR)       
-    #ifndef HPLATFORM_AVR
-        #define HPLATFORM_AVR TRUE
-    #endif
     #include "config/avr.h"                                       
 #else
     #error "Unknown platform — please add your own HPLATFORM_*"

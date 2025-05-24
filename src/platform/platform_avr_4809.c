@@ -1,4 +1,5 @@
-#if HPLATFORM_AVR_4809
+#include <defines.h>
+#ifdef HPLATFORM_AVR_4809
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -291,11 +292,6 @@ void* plSetMem(void* block, i32 value, u16 size) {
     return block;
 }
 
-void* plZeroMem(void* block, u16 size) {
-    HTRACE("platform_avr_4809.c -> plZeroMem(void*, u16)");
-    plSetMem(block, 0, size);
-}
-
 void* plCopyMem(void* dest, const void* source, u16 size) {
     HTRACE("platform_avr_4809.c -> plCopyMem(void*, void*, u16):void");
 
@@ -320,17 +316,22 @@ void* plCopyMem(void* dest, const void* source, u16 size) {
     return dest;
 }
 
+void* plZeroMem(void* block, u16 size) {
+    HTRACE("platform_avr_4809.c -> plZeroMem(void*, u16)");
+    plSetMem(block, 0, size);
+}
+
 
 void plSleep(u16 ms) {
     HTRACE("platform_avr_4809.c -> plSleep(u16):void");
     HDEBUG("HK_TIMER_SLEEP: %s", HK_TIMER_SLEEP ? "TRUE" : "FALSE");
 
-    #if HK_TIMER_SLEEP
-        if(ms == 0) {
-            HWARN("plSleep(): Cannot sleep for %u ms.", ms);
-            return;
-        }
+    if(ms == 0) {
+        HWARN("plSleep(): Cannot sleep for %u ms.", ms);
+        return;
+    }
 
+    #if HK_TIMER_SLEEP
         u32 end = gsMillis + ms;
         while((i32)(end - gsMillis) > 0) {
             set_sleep_mode(SLEEP_MODE_IDLE);
@@ -416,16 +417,6 @@ void plStopLogging(PlatformStateT* platformState) {
 }
 
 
-void plConsoleWrite(const char* message) {
-    if(message == NULL) return;
-    printf("%s", message);
-}
-void plConsoleWriteError(const char* message) {
-    if(message == NULL) return;
-    fprintf(stderr, "%s", message);
-}
-
-
 b8 plInitInput(PlatformStateT* platformState, void* platformInput) {
     HTRACE("platform_avr_4809.c -> plInitInput(PlatformStateT*, InputLayoutT*):b8");
 
@@ -454,6 +445,19 @@ void plInputConfig(PlatformStateT* platformState, void* platformInput) {
     InputLayoutT* input = (InputLayoutT*)platformInput; 
     _hkInputConfig(platformState, input);
 }
+
+
+void plConsoleWrite(const char* message) {
+    if(message == NULL) return;
+    printf("%s", message);
+}
+void plConsoleWriteError(const char* message) {
+    if(message == NULL) return;
+    fprintf(stderr, "%s", message);
+}
+
+
+u32 plGetAbsoluteTime() {return TRUE;}
 
 // ****************************************************************************
 // INTERRUPTS

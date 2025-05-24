@@ -3,7 +3,7 @@
   "tasks": [
     // AVR Platform
     {
-      "label": "Configure AVR Debug",
+      "label": "(AVR) Configure DEBUG",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -17,7 +17,7 @@
       "group": "none"
     },
     {
-      "label": "Build AVR Debug",
+      "label": "(AVR) Build DEBUG",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -30,7 +30,7 @@
       }
     },
     {
-      "label": "Configure AVR Release",
+      "label": "(AVR) Configure Release",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -44,7 +44,7 @@
       "group": "none"
     },
     {
-      "label": "Build AVR Release",
+      "label": "(AVR) Build Release",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -57,17 +57,17 @@
       }
     },
     {
-      "label": "Configure + Build AVR Debug",
+      "label": "(AVR) Configure + Build DEBUG",
       "dependsOn": [
-        "Configure AVR Debug",
-        "Build AVR Debug"
+        "(AVR) Configure DEBUG",
+        "(AVR) Build DEBUG"
       ],
       "group": { "kind": "build", "isDefault": true }
     },
 
     // ARM Platform
     {
-      "label": "Configure ARM Debug",
+      "label": "(ARM) Configure DEBUG",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -80,7 +80,7 @@
       "group": "none"
     },
     {
-      "label": "Build ARM Debug",
+      "label": "(ARM) Build DEBUG",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -93,7 +93,7 @@
       }
     },
     {
-      "label": "Configure ARM Release",
+      "label": "(ARM) Configure Release",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -106,7 +106,7 @@
       "group": "none"
     },
     {
-      "label": "Build ARM Release",
+      "label": "(ARM) Build Release",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -118,10 +118,18 @@
         "isDefault": false
       }
     },
+    {
+      "label": "(ARM) Configure + Build DEBUG",
+      "dependsOn": [
+        "(ARM) Configure DEBUG",
+        "(ARM) Build DEBUG"
+      ],
+      "group": { "kind": "build", "isDefault": true }
+    },
 
     // RISC-V Platform
     {
-      "label": "Configure RISC-V Debug",
+      "label": "(RISC-V) Configure DEBUG",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -134,7 +142,7 @@
       "group": "none"
     },
     {
-      "label": "Build RISC-V Debug",
+      "label": "(RISC-V) Build DEBUG",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -147,7 +155,7 @@
       }
     },
     {
-      "label": "Configure RISC-V Release",
+      "label": "(RISC-V) Configure Release",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -160,7 +168,7 @@
       "group": "none"
     },
     {
-      "label": "Build RISC-V Release",
+      "label": "(RISC-V) Build Release",
       "type": "shell",
       "command": "cmake",
       "args": [
@@ -173,7 +181,15 @@
       }
     },
     {
-      "label": "Flash RP2350 via OpenOCD (RISC-V | Debug)",
+      "label": "(RISC-V) Configure + Build DEBUG",
+      "dependsOn": [
+        "(RISC-V) Configure DEBUG",
+        "(RISC-V) Build DEBUG"
+      ],
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "(RISC-V) Flash DEBUG RP2350 via OpenOCD",
       "type": "shell",
       "command": "openocd",
       "args": [
@@ -193,7 +209,25 @@
       }
     },
     {
-      "label": "Flash RP2350 via OpenOCD (ARM | Debug)",
+      "label": "(RISC-V) DEBUG Server for RP2350",
+      "type": "shell",
+      "command": "openocd",
+      "args": [
+        "-f", "interface/cmsis-dap.cfg",
+        "-f", "target/rp2350-riscv.cfg",
+        "-c", "adapter speed 3000"
+      ],
+      "isBackground": true,
+      "group": "none",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "(ARM) Flash DEBUG RP2350 via OpenOCD",
       "type": "shell",
       "command": "openocd",
       "args": [

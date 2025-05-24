@@ -73,3 +73,5 @@ b8 plInitUSART(u32 baudRate);
 
 void plConsoleWrite(const char* message);
 void plConsoleWriteError(const char* message);
+
+u32  plGetAbsoluteTime(void);

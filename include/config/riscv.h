@@ -2,6 +2,10 @@
 #include <defines.h>
 
 #if HPLATFORM_RISCV
+    // PLATFOM SETTINGS
+    #define HPLATFORM_RISCV_2350               // RP2350
+    #define HUART                  0           // UART0 | UART1 - NO EFFECT FOR NOW               
+
     // GENERAL CONFIG
     #define HK_USE_CRLF            TRUE        // Use \r\n as a newline character
     #define HK_TIMER_SLEEP         TRUE        // Use TIMER0 for sleep instead of _delay_ms()
@@ -12,13 +16,13 @@
     #define HK_KEEP_TRACK_OF_TIME  FALSE       // Keep accurate track of time since uC has started
     #define HK_LOG_LEVEL           LOG_DEBUG   // TRACE | DEBUG | INFO | WARN | ERROR
     #define HK_USE_ISR_INPUT       FALSE       // Use hardwawre interrupts to read buttons - NO EFFECT FOR NOW
+    #define HK_LOG_OUTPUT          UART        // UART | USB
 
     // INPUT
-    #define HK_INPUT_REG           PORTC       // Input register
-    #define HK_ACCEPT_BTN          PIN4_bm     // Accept button
-    #define HK_CANCEL_BTN          PIN5_bm     // Cancel button
-    #define HK_NEXT_BTN            PIN6_bm     // Next button
-    #define HK_PREV_BTN            PIN7_bm     // Previous button
+    #define HK_ACCEPT_BTN          2           // Accept button   - GPIO2
+    #define HK_CANCEL_BTN          3           // Cancel button   - GPIO3
+    #define HK_NEXT_BTN            4           // Next button     - GPIO4
+    #define HK_PREV_BTN            5           // Previous button - GPIO5
 
     // To add more buttons just expand this list
     // ACCEPT is ID and HK_ACCEP_BTN is a physicall PIN of the uC
