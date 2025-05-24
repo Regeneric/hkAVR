@@ -3,18 +3,21 @@ set(PLATFORM_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 if(BUILD_FOR_AVR)
     add_compile_definitions(HPLATFORM_AVR)
     add_compile_definitions(__avr_gcc__)
+
     file(GLOB PLATFORM_SOURCES
         ${PLATFORM_DIR}/platform_avr*.c
     )
 elseif(BUILD_FOR_ARM)
     add_compile_definitions(HPLATFORM_ARM)
     add_compile_definitions(__arm_gcc__)
+
     file(GLOB PLATFORM_SOURCES
         ${PLATFORM_DIR}/platform_arm*.c
     )
 elseif(BUILD_FOR_RISCV)
     add_compile_definitions(HPLATFORM_RISCV)
     add_compile_definitions(__riscv_gcc__)
+    
     file(GLOB PLATFORM_SOURCES
         ${PLATFORM_DIR}/platform_riscv*.c
     )
@@ -46,6 +49,7 @@ target_link_libraries(hkplatform
         pico_stdlib
         pico_stdio_uart
         pico_stdio_usb 
+        pico_multicore
         
         hardware_uart
 )

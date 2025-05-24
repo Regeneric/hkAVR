@@ -16,7 +16,8 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         pico_stdlib
         pico_stdio
-        # pico_multicore
+        pico_multicore
+        pico_stdio_usb
         # pico_binary_info
 
         hardware_gpio
@@ -41,6 +42,7 @@ pico_add_extra_outputs(${PROJECT_NAME})
 if(BUILD_FOR_AVR)
     add_compile_definitions(HPLATFORM_AVR)
     add_compile_definitions(__avr_gcc__)
+
     target_compile_options(${PROJECT_NAME} PRIVATE
         $<$<CONFIG:Debug>:-O0 -g -Wall -ffunction-sections -fdata-sections -ffreestanding>
         $<$<CONFIG:Release>:-Os -ffunction-sections -fdata-sections -ffreestanding>
@@ -48,6 +50,7 @@ if(BUILD_FOR_AVR)
 elseif(BUILD_FOR_ARM)
     add_compile_definitions(HPLATFORM_ARM)
     add_compile_definitions(__arm_gcc__)
+
     target_compile_options(${PROJECT_NAME} PRIVATE
         $<$<CONFIG:Debug>:-O0 -g -std=gnu11>
         $<$<CONFIG:Release>:-Os -std=gnu11>
@@ -55,6 +58,7 @@ elseif(BUILD_FOR_ARM)
 elseif(BUILD_FOR_RISCV)
     add_compile_definitions(HPLATFORM_RISCV)
     add_compile_definitions(__riscv_gcc__)
+    
     target_compile_options(${PROJECT_NAME} PRIVATE
         $<$<CONFIG:Debug>:-O0 -g -std=gnu11>
         $<$<CONFIG:Release>:-Os -std=gnu11>

@@ -33,3 +33,8 @@ target_include_directories(hkcore
         ${PROJECT_INC_DIR}
         ${CMAKE_SOURCE_DIR}/lib/hkmalloc
 )
+
+# target_link_libraries(hkcore
+#     PUBLIC
+#         pico_stdio_usb 
+# )

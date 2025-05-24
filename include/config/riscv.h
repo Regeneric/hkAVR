@@ -1,22 +1,22 @@
 #pragma once
 #include <defines.h>
 
-#if HPLATFORM_RISCV
+#ifdef HPLATFORM_RISCV
     // PLATFOM SETTINGS
-    #define HPLATFORM_RISCV_2350               // RP2350
-    #define HUART                  0           // UART0 | UART1 - NO EFFECT FOR NOW               
+    #define HPLATFORM_RISCV_2350               // RP2350 - Hazard3
+    #define HLOG_UART              uart0       // uart0 | uart1 - NO EFFECT FOR NOW        
+    #define HLOG_UART_TX           0           // GPIO0 - Pico default UART TX - NO EFFECT FOR NOW
+    #define HLOG_UART_RX           1           // GPIO1 - Pico deafult UART RX - NO EFFECT FOR NOW       
 
     // GENERAL CONFIG
     #define HK_USE_CRLF            TRUE        // Use \r\n as a newline character
-    #define HK_TIMER_SLEEP         TRUE        // Use TIMER0 for sleep instead of _delay_ms()
+    #define HK_TIMER_SLEEP         FALSE       // Use TIMER0 for sleep instead of _delay_ms() - TODO: TO BE DBUGGED
     #define HK_USE_SCREEN          FALSE       // If you wanna use some LCD or OLED
     #define HK_BAUD_RATE           115200      // Terminal baud rate
-    #define HK_USE_PROGMEM         TRUE        // Use PROGMEM when it is possible
     #define HK_LOG_MSG_MAX_LEN     80          // Maximum length of a single log message
-    #define HK_KEEP_TRACK_OF_TIME  FALSE       // Keep accurate track of time since uC has started
-    #define HK_LOG_LEVEL           LOG_DEBUG   // TRACE | DEBUG | INFO | WARN | ERROR
+    #define HK_LOG_LEVEL           LOG_TRACE   // TRACE | DEBUG | INFO | WARN | ERROR
     #define HK_USE_ISR_INPUT       FALSE       // Use hardwawre interrupts to read buttons - NO EFFECT FOR NOW
-    #define HK_LOG_OUTPUT          UART        // UART | USB
+    #define HK_USB_LOG_OUTPUT      TRUE        // TRUE - USB ; FALSE - UART
 
     // INPUT
     #define HK_ACCEPT_BTN          2           // Accept button   - GPIO2

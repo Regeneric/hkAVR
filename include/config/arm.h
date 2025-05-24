@@ -1,7 +1,7 @@
 #pragma once
 #include <defines.h>
 
-#if HPLATFORM_ARM
+#ifdef HPLATFORM_ARM
     // GENERAL CONFIG
     #define HK_USE_CRLF            TRUE        // Use \r\n as a newline character
     #define HK_TIMER_SLEEP         TRUE        // Use TIMER0 for sleep instead of _delay_ms()
@@ -14,11 +14,11 @@
     #define HK_USE_ISR_INPUT       FALSE       // Use hardwawre interrupts to read buttons - NO EFFECT FOR NOW
 
     // INPUT
-    #define HK_INPUT_REG           PORTC       // Input register
-    #define HK_ACCEPT_BTN          PIN4_bm     // Accept button
-    #define HK_CANCEL_BTN          PIN5_bm     // Cancel button
-    #define HK_NEXT_BTN            PIN6_bm     // Next button
-    #define HK_PREV_BTN            PIN7_bm     // Previous button
+    #define HK_INPUT_REG           0       // Input register
+    #define HK_ACCEPT_BTN          0     // Accept button
+    #define HK_CANCEL_BTN          0     // Cancel button
+    #define HK_NEXT_BTN            0     // Next button
+    #define HK_PREV_BTN            0     // Previous button
 
     // To add more buttons just expand this list
     // ACCEPT is ID and HK_ACCEP_BTN is a physicall PIN of the uC

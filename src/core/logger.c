@@ -13,8 +13,8 @@
 static PlatformStateT* loggerPlatformState = NULL;
 
 b8 hkInitLogging(PlatformStateT* platformState) {
-    loggerPlatformState = platformState;
-    return plInitLogging(platformState);
+    loggerPlatformState = (PlatformStateT*)platformState;
+    return plInitLogging(loggerPlatformState);
 }
 
 void hkStopLogging() {
@@ -38,6 +38,7 @@ void hkStopLogging() {
         "[TRACE]: "
     };
 #else
+    // On RP2040/2350 it is stored in flash
     static const char* const logLevelStrings[6] = {
         "[FATAL]: ",
         "[ERROR]: ",

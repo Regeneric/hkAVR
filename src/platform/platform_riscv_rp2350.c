@@ -4,12 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+#include <tusb.h>
 #include <pico/stdlib.h>
-#include <hardware/uart.h>
 #include <pico/stdio.h>
 #include <pico/stdio_usb.h>
 #include <pico/stdio_uart.h>
 #include <pico/stdio/driver.h>
+#include <pico/multicore.h>
+#include <hardware/uart.h>
 
 #include <hkmalloc.h>
 
@@ -28,6 +31,8 @@ typedef struct InternalStateT {
 static InputLayoutT* _sgInputButtons;
 
 #define MAX_GPIO 30
+static volatile u32 _sgPendingGPIOFlags = 0;
+static volatile b8  _sgPendingGPIOState[MAX_GPIO];
 
 
 // ****************************************************************************
@@ -37,26 +42,46 @@ static inline void _hkDisableGPIO(InputLayoutT* input) {
     HTRACE("platform_riscv_2359.c -> _hkDisablePortInput(InputLayoutT*):void");
 
     for(u8 gpio = 0; gpio != MAX_GPIO; ++gpio) {
-        if(input->pinMask == gpio) gpio_deinit(gpio);
+        if(input->pin == gpio) gpio_deinit(gpio);
     }
 }
 
 void _hkInputCallback(uint gpio, uint32_t events) {
-    HTRACE("platform_riscv_2350.c -> _hkInputCallback(uint, uint32_t):void");
+    // bool pressed = (gpio_get(gpio) == 0);
+    
+    // u32 core0Fifo = ((u32)gpio << 8) | (pressed ? 1U : 0U);
+    // multicore_fifo_push_blocking(core0Fifo);
 
     for(u8 i = 0; i != BTN_COUNT; ++i) {
-        const InputLayoutT *btn = &_sgInputButtons[i];
+        const InputLayoutT* btn = &_sgInputButtons[i];
 
-        if(gpio == btn->pinMask) {
+        if(gpio == btn->pin) {
             b8 pressed = gpio_get(gpio) == 0;
 
-            EventT event;
-            event.code    = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED;
-            event.sender  = NULL;    // Or &whateverHere
-            event.data[0] = btn->id;
-            event.data[1] = pressed;
+            _sgPendingGPIOFlags |= (1U << gpio);
+            _sgPendingGPIOState[gpio] = pressed;
+            break;
+        }
+    }
+}
 
-            hkEventFire(&event);
+static void _hkProcessPendingGPIOEvents() {
+    HTRACE("platform_riscv_rp2350.c -> _hkProcessPendingGPIOEvents(void):void");
+
+    u32 pendingEvents = _sgPendingGPIOFlags;
+    if(pendingEvents == 0) return;
+    else _sgPendingGPIOFlags = 0;    // Clear global register
+
+    for(u8 i = 0; i != BTN_COUNT; ++i) {
+        const InputLayoutT* btn = &_sgInputButtons[i];
+        if(pendingEvents & (1 << btn->pin)) {
+            b8 pressed = _sgPendingGPIOState[btn->pin];
+
+            EventT event = {
+                .code   = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED,
+                .sender = NULL,
+                .data   = {btn->id, pressed}
+            }; hkEventFire(&event);
         }
     }
 }
@@ -66,15 +91,15 @@ void _hkInputConfig(PlatformStateT* platformState, InputLayoutT* input) {
 
     if(!PL_IS_RDY(platformState->statusFlags, PL_INPUT)) {
         HERROR("_hkInputConfig(): Input subsystem mus be initialized first!");
-        PL_SET_FLAGGED(platformState->statusFlags, PL_GENERAL_ERROR);
+        PL_SET_FLAG(platformState->statusFlags, PL_GENERAL_ERROR);
         return;
     }
     
-    if(input->name != NULL) HDEBUG("Pin 0x%x of %s as input", input->pinMask, input->name);
-    else HDEBUG("Pin 0x%x as input", input->pinMask);
+    if(input->name != NULL) HDEBUG("Pin 0x%x of %s as input", input->pin, input->name);
+    else HDEBUG("Pin 0x%x as input", input->pin);
  
     for(u8 gpio = 0; gpio != MAX_GPIO; ++gpio) {
-        if(input->pinMask == gpio) {
+        if(input->pin == gpio) {
             gpio_init(gpio);
             gpio_set_dir(gpio, GPIO_IN);
             gpio_pull_up(gpio);
@@ -89,6 +114,34 @@ void _hkDeepSleep() {return;}
 
 static inline void _hkWaitForTimerIRQ() {__asm volatile ("wfi");}
 
+void _hkRunCore1() {
+    while(1) {
+
+        // Block until core0 pushes us a gpio/state pair
+        u32 core0Fifo = multicore_fifo_pop_blocking();
+
+        u8 pin     = (core0Fifo >> 8) & 0xFF;  // Bits 15:8
+        b8 pressed = (core0Fifo & 0x01) != 0;  // Bits  7:0  
+
+        for(u8 i = 0; i < BTN_COUNT; ++i) {
+            const InputLayoutT* btn = &_sgInputButtons[i];
+
+            if(btn->pin == pin) {
+                EventT event = {
+                    .code   = pressed ? EC_BTN_PRESSED : EC_BTN_RELEASED,
+                    .sender = NULL,
+                    .data   = { btn->id, pressed }
+                };
+                
+                _hkProcessPendingGPIOEvents();
+                hkEventFire(&event);
+                hkEventProcess();
+                break;
+            }
+        }
+    }
+}
+
 // ****************************************************************************
 // PLATFORM SPECIFIC FUNCTIONS
 // ----------------------------------------------------------------------------
@@ -96,7 +149,7 @@ static inline void _hkWaitForTimerIRQ() {__asm volatile ("wfi");}
 b8 plStartup(PlatformStateT* platformState, u32 baudRate) {
     stdio_init_all();
 
-    // HTRACE("platform_riscv_2350.c -> plStartup(PlatformStateT*, u32):b8"); 
+    HTRACE("platform_riscv_2350.c -> plStartup(PlatformStateT*, u32):b8"); 
 
     platformState->statusFlags = (u32)0x0000;
     #if HK_ALLOW_MALLOC
@@ -114,21 +167,17 @@ b8 plStartup(PlatformStateT* platformState, u32 baudRate) {
     if(!plInitLogging(platformState)) {
         // Logger subsystem failed to init
         PL_SET_ERR(platformState->statusFlags, PL_LOGGING);
-        HARDWARE_DEBUG(platformState->statusFlags);
     } else PL_SET_RDY(platformState->statusFlags, PL_LOGGING);
     HINFO("Logging subsystem initialized.");
 
     if(!hkInitMemory(platformState)) {
         HFATAL("plStartup(): Memory subsystem failed to initialize.");
         PL_SET_ERR(platformState->statusFlags, PL_MEMORY);
-        HARDWARE_DEBUG(platformState->statusFlags);
-    } else PL_SET_RDY(platformState->statusFlags, PL_MEMORY);
-    HINFO("Memory subsystem initialized.");
+    } HINFO("Memory subsystem initialized.");
 
     if(!hkInitEvent(platformState)) {
         HFATAL("plStartup(): Event subsystem failed to initialize.");
         PL_SET_ERR(platformState->statusFlags, PL_EVENT);
-        HARDWARE_DEBUG(platformState->statusFlags);
     } else PL_SET_RDY(platformState->statusFlags, PL_EVENT);
     HINFO("Event subsystem initialized.");
 
@@ -154,8 +203,11 @@ void plShutdown(PlatformStateT* platformState) {
 
 b8 plMessageStream(PlatformStateT* platformState) {
     // HTRACE("platform_riscv_2350.c -> plMessageStream(PlatformStateT*):b8");    // I do not recommend uncommenting this line
-
     InternalStateT* internalState = (InternalStateT*)platformState->internalState;
+    
+    tud_task();     // Keep serial port alive and active
+    _hkProcessPendingGPIOEvents();
+
     if(PL_IS_RDY(platformState->statusFlags, PL_EVENT) && PL_IS_FLAG_SET(platformState->statusFlags, PL_ALL_INIT_OK)) {
         hkEventProcess();
     } return TRUE;
@@ -170,7 +222,7 @@ void* plAllocMem(u16 size) {
     HTRACE("plAllocMem(): HK_ALLOW_MALLOC: %s", HK_ALLOW_MALLOC ? "TRUE" : "FALSE");
     
     #if HK_ALLOW_MALLOC
-        HWARN("plAllocMem(): Using malloc() on AVR is highly discouraged!");
+        HTRACE("plAllocMem(): Using malloc() instead of hkMalloc()");
         void* buffer = malloc((u16)size);
     #else
         HTRACE("plAllocMem(): Using hkMalloc() instead of malloc()");
@@ -188,7 +240,7 @@ void  plFreeMem(void* block) {
     HTRACE("plFreeMem(): HK_ALLOW_MALLOC: %s", HK_ALLOW_MALLOC ? "TRUE" : "FALSE");
 
     #if HK_ALLOW_MALLOC
-        HWARN("plFreeMem(): Using free() on AVR is highly discouraged!");
+        HTRACE("plFreeMem(): Using free() instead of hkFree()");
         free(block);
     #else
         HTRACE("plFreeMem(): Using hkFree() instead of free()");
@@ -277,16 +329,10 @@ b8 plInitUSART(u32 baudRate) {
     // Absolute minimum speed while using 20 MHz clock
     if(baudRate <= 1220) return FALSE;
 
-    // TODO: Allow user to change uart pins
-    gpio_init(PICO_DEFAULT_UART_TX_PIN); 
-    gpio_set_dir(PICO_DEFAULT_UART_TX_PIN, GPIO_OUT);
-
-    gpio_init(PICO_DEFAULT_UART_RX_PIN);
-    gpio_set_dir(PICO_DEFAULT_UART_RX_PIN, GPIO_IN);
-
     // Couldn't set passed baud rate
     if(uart_init(uart0, baudRate) != baudRate) return FALSE;
 
+    // TODO: Allow user to change uart pins
     gpio_set_function(PICO_DEFAULT_UART_TX_PIN, UART_FUNCSEL_NUM(uart0, PICO_DEFAULT_UART_TX_PIN));
     gpio_set_function(PICO_DEFAULT_UART_RX_PIN, UART_FUNCSEL_NUM(uart0, PICO_DEFAULT_UART_RX_PIN));
 
@@ -299,10 +345,10 @@ b8 plInitUSART(u32 baudRate) {
 }
 
 b8 plInitLogging(PlatformStateT* platformState) {
-    #if HK_LOG_OUTPUT == USB
+    #if HK_USB_LOG_OUTPUT
         // stdio_filter_driver(&stdio_usb);
         HDEBUG("plInitInput(): TinyUSB support enabled.");
-    #elif HK_LOG_OUTPUT == UART
+    #else
         InternalStateT* internalState = (InternalStateT*)platformState->internalState;
 
         if(!plInitUSART(internalState->baudRate)) {
@@ -311,7 +357,7 @@ b8 plInitLogging(PlatformStateT* platformState) {
             return FALSE;
         }
 
-        stdio_filter_driver(&stdio_uart);
+        // stdio_filter_driver(&stdio_uart);
         PL_SET_RDY(platformState->statusFlags, PL_USART);
     #endif
 

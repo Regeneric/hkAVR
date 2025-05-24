@@ -1,6 +1,8 @@
 #include <stdio.h>
 
+#include <tusb.h>
 #include <pico/stdlib.h>
+#include <pico/multicore.h>
 #include <hardware/gpio.h>
 
 #include <defines.h>
@@ -12,10 +14,16 @@
 
 #include <containers/darray.h>
 
-static PlatformStateT* platformState;
+static PlatformStateT platformState;
+
+b8 hkOnEvent(const EventT* event, void* listener);
+b8 hkOnButton(const EventT* event, void* listener);
+
+void _hkRunCore1(void);
 
 int main() {
-    plStartup(platformState, HK_BAUD_RATE);
+    plStartup(&platformState, HK_BAUD_RATE);
+    multicore_launch_core1(_hkRunCore1);
 
     static InputLayoutT buttons[BTN_COUNT] = {
         {NULL, BTN_ACCEPT, HK_ACCEPT_BTN, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, "GPIO"},
@@ -24,42 +32,63 @@ int main() {
         {NULL, BTN_PREV  , HK_PREV_BTN  , GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, NULL}
     };
 
-    if(!hkInitInput(platformState, buttons)) {
+    if(!hkInitInput(&platformState, buttons)) {
         HERROR("plStartup(): Input subsystem failed to initialize.");
     } else HINFO("Input subsystem initialized.");
 
-    // hkEventRegister(0x69            , 0, hkOnEvent);
-    // hkEventRegister(EC_PLATFORM_STOP, 0, hkOnEvent);
-    // hkEventRegister(EC_BTN_PRESSED  , 0, hkOnButton);
-    // hkEventRegister(EC_BTN_RELEASED , 0, hkOnButton);
+    hkEventRegister(0x69            , 0, hkOnEvent);
+    hkEventRegister(EC_PLATFORM_STOP, 0, hkOnEvent);
+    hkEventRegister(EC_BTN_PRESSED  , 0, hkOnButton);
+    hkEventRegister(EC_BTN_RELEASED , 0, hkOnButton);
 
-    while(1) {
-        // printf("test\n");
-        // sleep_ms(1000);
-        HINFO("TEST");
-        plSleep(1000);
-        // sleep_ms(1000);
-    }
+    while(PL_IS_FLAG_SET(platformState.statusFlags, PL_ALL_INIT_OK)) {
+        // plConsoleWrite("\r\n\0");
+        plMessageStream(&platformState);
+        // tud_task();
+        // __asm volatile("wfi");
+    } return 0;
 }
 
 
+b8 hkOnEvent(const EventT* event, void* listener) {
+    HTRACE("main.c -> hkOnEvent(const EventT*, void*):b8");
 
-// #include <pico/stdlib.h>
-// #include <hardware/gpio.h>
+    switch(event->code) {
+        case EC_PLATFORM_STOP: {
+            HINFO("EC_PLATFORM_STOP event recieved; shutting down...");
+            // plShutdown(&platformState);
+            return TRUE;
+        } break; default: return TRUE;
+    } return TRUE;
+}
 
-// int main() {
-//     gpio_init(16);
-//     gpio_set_dir(16, true);
+b8 hkOnButton(const EventT* event, void* listener) {
+    HTRACE("main.c -> hkOnButton(const EventT*, void*):b8");
 
-//     while(1) {
-//         gpio_put(16, true);
-//         sleep_ms(1000);
-//         gpio_put(16, false);
-//         sleep_ms(1000);
-//     }
+    u8 buttonID    = (u8)event->data[0];
+    b8 buttonState = (b8)event->data[1];
 
-//     return 0;
-// }
+    switch(event->code) {
+        case EC_BTN_PRESSED: {
+            HDEBUG("hkOnButton(): Button %u %s", buttonID, buttonState ? "pressed" : "released");
+            switch(buttonID) {
+                case BTN_ACCEPT: {
+                    EventT e;
+                    e.code    = EC_PLATFORM_STOP;
+                    e.data[0] = 0;
+                    e.data[1] = 0;
+                    e.sender  = NULL;
+                
+                    hkEventFire(&e);
+                } break; default: return TRUE;
+            }
+        } break;
+        case EC_BTN_RELEASED: {
+            HDEBUG("hkOnButton(): Button %u %s", buttonID, buttonState ? "pressed" : "released");
+        } break; default: return TRUE;
+    } return TRUE;
+}
+
 
 
 
@@ -123,7 +152,7 @@ int main() {
 //         //     HDEBUG("Memory is on");
 //         // } else HDEBUG("Memory is off");
         
-//         plMessageStream(&platformState);
+//         plMessageStream(platformState);
 //         // plSleep(1000);
 //     } return 0;
 // }

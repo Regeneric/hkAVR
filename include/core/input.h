@@ -7,7 +7,7 @@
 typedef struct InputLayoutT {
     void* port;
     u8 id;
-    u8 pinMask;
+    u8 pin;
     u8 isc;    
     const char* name;
 } InputLayoutT;

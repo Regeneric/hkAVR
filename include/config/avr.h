@@ -1,7 +1,7 @@
 #pragma once
 #include <defines.h>
 
-#if HPLATFORM_AVR
+#ifdef HPLATFORM_AVR
     // PLATFOM SETTINGS
     #define HPLATFORM_AVR_4809                 // ATMega 4809
 

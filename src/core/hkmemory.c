@@ -27,9 +27,9 @@ static PlatformStateT* memoryPlatformState;
 b8 hkInitMemory(PlatformStateT* platformState) {
     HTRACE("hkmemory.c -> hkInitMemory(void):void");
     
-    memoryPlatformState = platformState;
+    memoryPlatformState = (PlatformStateT*)platformState;
 
-    if(PL_IS_RDY(platformState->statusFlags, PL_MEMORY)) {
+    if(PL_IS_RDY(memoryPlatformState->statusFlags, PL_MEMORY)) {
         HDEBUG("hkInitMemory(): Memory already initialized");
         return FALSE;
     }
@@ -37,12 +37,13 @@ b8 hkInitMemory(PlatformStateT* platformState) {
     #if HK_MEM_HEAVY_DBG
         if(plZeroMem(&memStats, sizeof(memStats)) == NULL) {
             HERROR("hkInitMemory(): Memory could not be set!");
-            PL_SET_ERR(platformState->statusFlags, PL_MEMORY);
+            PL_SET_ERR(memoryPlatformState->statusFlags, PL_MEMORY);
             return FALSE;
         }
     #endif
     
-    PL_SET_RDY(platformState->statusFlags, PL_MEMORY);
+    PL_SET_RDY(memoryPlatformState->statusFlags, PL_MEMORY);
+
     HDEBUG("hkInitMemory(): Memory initialized");
     return TRUE;
 }
@@ -52,7 +53,7 @@ void hkStopMemory() {
     HDEBUG("hkStopMemory(): Stopping memory subsystem.");
 
     if(!PL_IS_RDY(memoryPlatformState->statusFlags, PL_MEMORY)) {
-        HDEBUG("hkAllocateMem(): Memory submodule is not initialized; nothing to stop.");
+        HDEBUG("hkStopMemory(): Memory submodule is not initialized; nothing to stop.");
         return;
     }
 
@@ -68,13 +69,13 @@ void hkStopMemory() {
 
 void* hkAllocateMem(u16 size, MemoryTagT tag) {
     HTRACE("hkmemory.c -> hkAllocateMem(u16, MemoryTagT):void*");
+
     if(!PL_IS_RDY(memoryPlatformState->statusFlags, PL_MEMORY)) {
         HWARN("hkAllocateMem(): Memory submodule is not initialized!");
         return NULL;
     }
 
     PL_CLEAR_FLAG(memoryPlatformState->statusFlags, PL_GENERAL_ERROR);
-    PL_SET_RDY(memoryPlatformState->statusFlags, PL_MEMORY);
 
     if(tag == MEMT_UNKNOWN) {
         PL_SET_FLAG(memoryPlatformState->statusFlags, PL_GENERAL_ERROR);
@@ -94,15 +95,14 @@ void* hkAllocateMem(u16 size, MemoryTagT tag) {
         return NULL;
     }
 
-    PL_SET_RDY(memoryPlatformState->statusFlags, PL_MEMORY);
     plZeroMem(block, size);
     return block;
 }
 
 void hkFreeMem(void* block, u16 size, MemoryTagT tag) {
     HTRACE("hkmemory.c -> hkFreeMem(void*, u16, MemoryTagT):void");
-    if(!PL_IS_RDY(memoryPlatformState->statusFlags, PL_MEMORY)) {
-        HWARN("hkAllocateMem(): Memory submodule is not initialized!");
+    if(PL_IS_ERR(memoryPlatformState->statusFlags, PL_MEMORY)) {
+        HWARN("hkFreeMem(): Memory submodule is not initialized!");
         return;
     }
 
@@ -128,7 +128,7 @@ void* hkZeroMem(void* block, u16 size) {
     HTRACE("hkmemory.c -> hkZeroMem(void*, u16):void*");
 
     if(!PL_IS_RDY(memoryPlatformState->statusFlags, PL_MEMORY)) {
-        HWARN("hkAllocateMem(): Memory submodule is not initialized!");
+        HWARN("hkZeroMem(): Memory submodule is not initialized!");
         return NULL;
     } return plZeroMem(block, size);
 }
@@ -137,7 +137,7 @@ void* hkCopyMem(void* dest, const void* source, u16 size) {
     HTRACE("hkmemory.c -> hkCopyMem(void*,const void*, u16):void*");
 
     if(!PL_IS_RDY(memoryPlatformState->statusFlags, PL_MEMORY)) {
-        HWARN("hkAllocateMem(): Memory submodule is not initialized!");
+        HWARN("hkCopyMem(): Memory submodule is not initialized!");
         return NULL;
     } return plCopyMem(dest, source, size);
 }
@@ -146,7 +146,7 @@ void* hkSetMem(void* dest, i32 value, u16 size) {
     HTRACE("hkmemory.c -> hkSetMem(void*, i32, u16):void*");
 
     if(!PL_IS_RDY(memoryPlatformState->statusFlags, PL_MEMORY)) {
-        HWARN("hkAllocateMem(): Memory submodule is not initialized!");
+        HWARN("hkSetMem(): Memory submodule is not initialized!");
         return NULL;
     } return plSetMem(dest, value, size);
 }
@@ -168,6 +168,7 @@ void* hkSetMem(void* dest, i32 value, u16 size) {
             "ENTITY      "
         };
     #else
+        // On RP2040/2350 it is stored in flash
         static const char* memoryTagStrings[MEMT_MAX_TAGS] = {
             "UNKNOWN     ",
             "ARRAY       ",

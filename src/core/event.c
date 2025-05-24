@@ -156,14 +156,14 @@ b8 hkEventPoll(EventT* event) {
 void hkEventProcess(void) {
     // HTRACE("event.c -> hkEventProcess(void):void");  // I do not recommend uncommenting this line
     
-    EventT event;
+    static EventT event;
     while(hkEventPoll(&event)) {
         u16 code  = event.code;
         u16 count = hkDarrayLength(_sListeners[code]);
 
         for(u16 i = 0; i < count; ++i) {
-            EventListenerT* L = &_sListeners[code][i];
-            if(L->callback(&event, L->listener)) {
+            EventListenerT* eventListener = &_sListeners[code][i];
+            if(eventListener->callback(&event, eventListener->listener)) {
                 HDEBUG("hkEventProcess(): Event 0x%x is being handled", code);
                 break;
             }

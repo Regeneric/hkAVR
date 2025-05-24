@@ -62,7 +62,7 @@ void _hkInputConfig(PlatformStateT* platformState, InputLayoutT* input) {
 
     if(!PL_IS_RDY(platformState->statusFlags, PL_INPUT)) {
         HERROR("_hkInputConfig(): Input subsystem mus be initialized first!");
-        PL_SET_FLAGGED(platformState->statusFlags, PL_GENERAL_ERROR);
+        PL_SET_FLAG(platformState->statusFlags, PL_GENERAL_ERROR);
         return;
     }
 

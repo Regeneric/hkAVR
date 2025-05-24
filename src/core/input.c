@@ -8,8 +8,9 @@ static PlatformStateT* _sgInputPlatformState;
 
 b8 hkInitInput(PlatformStateT* platformState, InputLayoutT* input) {
     HTRACE("input.c -> hkInitInput(PlatformStateT*, InputLayoutT*):b8");
+    _sgInputPlatformState = (PlatformStateT*)platformState;
 
-    plInitInput(platformState, input);
+    plInitInput(_sgInputPlatformState, input);
     return TRUE;
 }
 
